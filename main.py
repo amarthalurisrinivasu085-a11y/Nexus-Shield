@@ -25,7 +25,43 @@ from containment.quarantine import QuarantineController
 # Top-level FastAPI instance for Vercel / serverless deployments
 try:
     from fastapi import FastAPI
+    from fastapi.middleware.cors import CORSMiddleware
+    from fastapi.responses import HTMLResponse, FileResponse
+    import os
+
     app = FastAPI(title="NEXUS-SHIELD", version="2.6.4")
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+    @app.get("/", response_class=HTMLResponse)
+    def read_root():
+        index_path = os.path.join(BASE_DIR, "index.html")
+        if os.path.exists(index_path):
+            with open(index_path, "r", encoding="utf-8") as f:
+                return f.read()
+        return "<h1>NEXUS-SHIELD SOC Dashboard Active</h1>"
+
+    @app.get("/index.css")
+    def get_css():
+        path = os.path.join(BASE_DIR, "index.css")
+        if os.path.exists(path):
+            return FileResponse(path, media_type="text/css")
+        return ""
+
+    @app.get("/app.js")
+    def get_js():
+        path = os.path.join(BASE_DIR, "app.js")
+        if os.path.exists(path):
+            return FileResponse(path, media_type="application/javascript")
+        return ""
 
     @app.get("/api/health")
     def health():
