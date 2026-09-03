@@ -1,0 +1,15 @@
+# Core Networking & Sniffing
+scapy>=2.5.0
+psutil>=5.9.0
+
+# Graph & Threat Analysis
+networkx>=3.0
+
+# Backend & Real-Time API
+fastapi>=0.110.0
+uvicorn[standard]>=0.28.0
+pydantic>=2.6.0
+pyyaml>=6.0
+
+# CLI & Visual Formatting
+rich>=13.7.0

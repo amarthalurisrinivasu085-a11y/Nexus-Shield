@@ -1,0 +1,797 @@
+/* ==========================================================================
+   NEXUS-SHIELD: SOC Operations Center Design System & Tokens
+   ========================================================================== */
+
+:root {
+  --bg-core: #070B14;
+  --bg-surface: #0E1526;
+  --bg-card: rgba(18, 26, 46, 0.75);
+  --bg-card-hover: rgba(25, 36, 64, 0.85);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-active: rgba(6, 182, 212, 0.4);
+  --border-danger: rgba(239, 68, 68, 0.5);
+
+  --accent-cyan: #06B6D4;
+  --accent-blue: #3B82F6;
+  --accent-emerald: #10B981;
+  --accent-amber: #F59E0B;
+  --accent-danger: #EF4444;
+  --accent-purple: #8B5CF6;
+
+  --text-primary: #F8FAFC;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-full: 9999px;
+
+  --shadow-glow-cyan: 0 0 20px rgba(6, 182, 212, 0.25);
+  --shadow-glow-danger: 0 0 25px rgba(239, 68, 68, 0.35);
+  --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body.dark-theme {
+  background-color: var(--bg-core);
+  background-image: 
+    radial-gradient(circle at 15% 15%, rgba(6, 182, 212, 0.06) 0%, transparent 40%),
+    radial-gradient(circle at 85% 85%, rgba(239, 68, 68, 0.05) 0%, transparent 40%),
+    linear-gradient(to bottom, #070B14, #050810);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+/* ==========================================================================
+   Header & Telemetry Pill Bar
+   ========================================================================== */
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 28px;
+  background: rgba(14, 21, 38, 0.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-subtle);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  gap: 20px;
+}
+
+.brand-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.logo-container {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(6, 182, 212, 0.12);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  border-radius: var(--radius-md);
+}
+
+.shield-icon {
+  font-size: 22px;
+  z-index: 2;
+}
+
+.pulse-ring {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--accent-cyan);
+  animation: pulse-ring-anim 2.5s infinite;
+  opacity: 0;
+}
+
+@keyframes pulse-ring-anim {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+
+.brand-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-title {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  background: linear-gradient(135deg, #FFFFFF 30%, var(--accent-cyan) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.version-badge {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  background: rgba(255, 255, 255, 0.08);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  color: var(--text-secondary);
+}
+
+.brand-subtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.telemetry-bar {
+  display: flex;
+  gap: 14px;
+  flex: 1;
+  justify-content: center;
+}
+
+.metric-card {
+  background: rgba(18, 26, 46, 0.6);
+  border: 1px solid var(--border-subtle);
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  min-width: 140px;
+  transition: var(--transition-smooth);
+}
+
+.metric-card:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(25, 36, 64, 0.7);
+}
+
+.metric-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.metric-value-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.metric-value {
+  font-size: 13px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+}
+
+.threat-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-danger);
+}
+
+.danger-pulse {
+  animation: danger-blink 1.2s infinite alternate;
+}
+
+@keyframes danger-blink {
+  from { opacity: 0.4; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1.2); box-shadow: 0 0 10px var(--accent-danger); }
+}
+
+.status-indicator.online {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-emerald);
+  box-shadow: 0 0 8px var(--accent-emerald);
+}
+
+.highlight-amber { color: var(--accent-amber); }
+.danger-text { color: var(--accent-danger); }
+.active-green { color: var(--accent-emerald); }
+
+.severity-pill {
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+}
+
+.severity-pill.critical {
+  background: rgba(239, 68, 68, 0.2);
+  color: #FCA5A5;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+.header-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* ==========================================================================
+   Buttons & Micro-Interactions
+   ========================================================================== */
+
+.btn {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition-smooth);
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #0284C7, #0369A1);
+  color: white;
+  border-color: rgba(6, 182, 212, 0.4);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #0369A1, #0284C7);
+  box-shadow: var(--shadow-glow-cyan);
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #DC2626, #B91C1C);
+  color: white;
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.btn-danger:hover {
+  background: linear-gradient(135deg, #B91C1C, #991B1B);
+  box-shadow: var(--shadow-glow-danger);
+}
+
+.btn-outline {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary);
+  border-color: var(--border-subtle);
+}
+
+.btn-outline:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+}
+
+.btn-block {
+  width: 100%;
+  justify-content: center;
+  padding: 12px 16px;
+  font-size: 14px;
+}
+
+/* ==========================================================================
+   Main Grid Layout
+   ========================================================================== */
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1.8fr 1.2fr;
+  gap: 20px;
+  padding: 24px 28px;
+}
+
+.panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(12px);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.panel-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.panel-title-group h2, .panel-title-group h3 {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+}
+
+/* ==========================================================================
+   Interactive Network Topology Graph
+   ========================================================================== */
+
+.graph-legend {
+  display: flex;
+  gap: 12px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.dot-normal { background: var(--accent-cyan); }
+.dot-pivot { background: var(--accent-danger); }
+.dot-target { background: var(--accent-purple); }
+.dot-isolated { background: var(--text-muted); }
+
+.canvas-wrapper {
+  position: relative;
+  background: rgba(7, 11, 20, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  height: 480px;
+}
+
+#networkGraphCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.graph-overlay-hint {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  background: rgba(14, 21, 38, 0.8);
+  border: 1px solid var(--border-subtle);
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.node-inspector {
+  margin-top: 16px;
+  background: rgba(14, 21, 38, 0.7);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+}
+
+.inspector-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.inspector-header h3 {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.badge {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+}
+
+.badge-danger {
+  background: rgba(239, 68, 68, 0.2);
+  color: #F87171;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+.inspector-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.inspect-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.inspect-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.inspect-val {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-top: 2px;
+}
+
+.mono { font-family: var(--font-mono); }
+
+/* ==========================================================================
+   Analytics, Attack Path & Containment Panel
+   ========================================================================== */
+
+.analytics-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.card {
+  background: rgba(14, 21, 38, 0.6);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 16px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.pulse-tag {
+  font-size: 10px;
+  padding: 2px 8px;
+  background: rgba(239, 68, 68, 0.2);
+  color: #FCA5A5;
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  animation: danger-blink 1.5s infinite alternate;
+}
+
+.path-visual-chain {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(7, 11, 20, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  padding: 14px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 12px;
+}
+
+.chain-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.step-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+  font-family: var(--font-mono);
+}
+
+.step-compromised .step-circle {
+  background: rgba(239, 68, 68, 0.25);
+  color: #F87171;
+  border: 1px solid var(--accent-danger);
+}
+
+.step-pivot .step-circle {
+  background: rgba(245, 158, 11, 0.25);
+  color: #FBBF24;
+  border: 1px solid var(--accent-amber);
+}
+
+.step-target .step-circle {
+  background: rgba(139, 92, 246, 0.25);
+  color: #C084FC;
+  border: 1px solid var(--accent-purple);
+}
+
+.step-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.step-name {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.step-desc {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.chain-arrow {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.attack-summary-text {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.risk-number-badge {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  font-weight: 800;
+  color: #F87171;
+  background: rgba(239, 68, 68, 0.15);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.risk-factors-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.factor-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.factor-points {
+  font-weight: 700;
+  color: #FCA5A5;
+  font-family: var(--font-mono);
+}
+
+.progress-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 3px;
+}
+
+.fill-amber { background: linear-gradient(90deg, #F59E0B, #D97706); }
+.fill-danger { background: linear-gradient(90deg, #EF4444, #DC2626); }
+
+/* Containment Card */
+.containment-card {
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.status-badge-live {
+  font-size: 10px;
+  background: rgba(16, 185, 129, 0.2);
+  color: #6EE7B7;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+}
+
+.containment-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.containment-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.target-ip-badge {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  color: #F87171;
+}
+
+.containment-explanation {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+
+/* ==========================================================================
+   Bottom Telemetry: Packets and Inventory
+   ========================================================================== */
+
+.telemetry-bottom-section {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 20px;
+  padding: 0 28px 28px 28px;
+}
+
+.packet-stream-panel, .asset-inventory-panel {
+  min-height: 320px;
+}
+
+.stream-stats {
+  display: flex;
+  gap: 8px;
+}
+
+.stat-pill {
+  font-size: 11px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.dot-live {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-emerald);
+  animation: pulse-ring-anim 1.5s infinite;
+}
+
+.packet-terminal {
+  background: #050811;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  height: 240px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.packet-terminal::-webkit-scrollbar {
+  width: 6px;
+}
+.packet-terminal::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+}
+
+.log-line {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.log-time { color: var(--text-muted); }
+.log-proto { font-weight: 700; padding: 1px 4px; border-radius: 3px; font-size: 10px; }
+.proto-tcp { background: rgba(59, 130, 246, 0.2); color: #93C5FD; }
+.proto-smb { background: rgba(239, 68, 68, 0.2); color: #FCA5A5; }
+.proto-dns { background: rgba(16, 185, 129, 0.2); color: #6EE7B7; }
+.proto-arp { background: rgba(245, 158, 11, 0.2); color: #FCD34D; }
+
+.log-src { color: var(--text-primary); }
+.log-arrow { color: var(--text-muted); }
+.log-dst { color: var(--text-primary); }
+.log-alert { color: #F87171; font-weight: 700; }
+
+/* Table Styles */
+.table-container {
+  overflow-x: auto;
+}
+
+.asset-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  text-align: left;
+}
+
+.asset-table th {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 10px;
+}
+
+.asset-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.asset-table tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.status-tag {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.status-tag.normal { background: rgba(16, 185, 129, 0.2); color: #6EE7B7; }
+.status-tag.suspicious { background: rgba(239, 68, 68, 0.2); color: #F87171; }
+.status-tag.quarantined { background: rgba(100, 116, 139, 0.3); color: #94A3B8; }
+
+.hidden { display: none !important; }
+
+/* Toast Notifications */
+.toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 100;
+}
+
+.toast {
+  background: rgba(14, 21, 38, 0.95);
+  border: 1px solid var(--border-danger);
+  box-shadow: var(--shadow-glow-danger);
+  backdrop-filter: blur(12px);
+  padding: 12px 18px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  animation: toast-slide-in 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes toast-slide-in {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@media (max-width: 1200px) {
+  .dashboard-grid, .telemetry-bottom-section {
+    grid-template-columns: 1fr;
+  }
+}

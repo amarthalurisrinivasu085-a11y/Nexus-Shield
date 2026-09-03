@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEXUS-SHIELD | Adaptive Network Threat Detection & Containment Platform</title>
+  <meta name="description" content="Real-Time Adaptive Network Threat Detection, Attack-Path Analysis & Automated Containment Platform. Continuous network monitoring, behavioral baseline anomaly scoring, and automated host isolation.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="index.css">
+</head>
+<body class="dark-theme">
+  <!-- Top Defense Status Header -->
+  <header class="header" id="main-header">
+    <div class="brand-section">
+      <div class="logo-container">
+        <div class="pulse-ring"></div>
+        <div class="shield-icon">🛡️</div>
+      </div>
+      <div>
+        <div class="brand-title-wrap">
+          <h1 class="brand-title">NEXUS-SHIELD</h1>
+          <span class="version-badge">v2.6.4</span>
+        </div>
+        <p class="brand-subtitle">Real-Time Adaptive Network Threat Detection & Containment Platform</p>
+      </div>
+    </div>
+
+    <!-- Live Grid Telemetry Pills -->
+    <div class="telemetry-bar">
+      <div class="metric-card" id="metric-threat-level">
+        <span class="metric-label">DEFCON LEVEL</span>
+        <div class="metric-value-wrap">
+          <span class="threat-dot danger-pulse"></span>
+          <span class="metric-value danger-text" id="defcon-value">LEVEL 2 (ELEVATED)</span>
+        </div>
+      </div>
+
+      <div class="metric-card" id="metric-risk-index">
+        <span class="metric-label">GLOBAL THREAT RISK</span>
+        <div class="metric-value-wrap">
+          <span class="metric-value highlight-amber" id="global-risk-value">91 / 100</span>
+          <span class="severity-pill critical" id="global-risk-badge">CRITICAL</span>
+        </div>
+      </div>
+
+      <div class="metric-card" id="metric-nodes-monitored">
+        <span class="metric-label">DISCOVERED ASSETS</span>
+        <span class="metric-value" id="asset-count-val">5 NODES</span>
+      </div>
+
+      <div class="metric-card" id="metric-containment-status">
+        <span class="metric-label">CONTAINMENT ENGINE</span>
+        <div class="metric-value-wrap">
+          <span class="status-indicator online"></span>
+          <span class="metric-value active-green" id="containment-engine-status">ARMED & ACTIVE</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Control Actions -->
+    <div class="header-actions">
+      <button class="btn btn-danger" id="btn-simulate-attack">
+        <span class="btn-icon">⚡</span> Run Attack Simulation
+      </button>
+      <button class="btn btn-outline" id="btn-reset-baseline">
+        <span class="btn-icon">🔄</span> Reset Baseline
+      </button>
+      <button class="btn btn-primary" id="btn-export-report">
+        <span class="btn-icon">📥</span> Export Incident Log
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Security Dashboard Grid -->
+  <main class="dashboard-grid">
+    <!-- Left Panel: Live Dynamic Network Security Graph -->
+    <section class="panel graph-panel" id="panel-network-graph">
+      <div class="panel-header">
+        <div class="panel-title-group">
+          <span class="panel-icon">🌐</span>
+          <h2>Live Network Topology & Attack-Path Graph</h2>
+        </div>
+        <div class="graph-legend">
+          <span class="legend-item"><span class="legend-dot dot-normal"></span> Normal Node</span>
+          <span class="legend-item"><span class="legend-dot dot-pivot"></span> Compromised / Pivot</span>
+          <span class="legend-item"><span class="legend-dot dot-target"></span> Crown Jewel Target</span>
+          <span class="legend-item"><span class="legend-dot dot-isolated"></span> Quarantined</span>
+        </div>
+      </div>
+
+      <div class="canvas-wrapper">
+        <canvas id="networkGraphCanvas" width="900" height="540"></canvas>
+        <div class="graph-overlay-hint">
+          <span>💡 Click any node to inspect telemetry, attack path, or trigger quarantine</span>
+        </div>
+      </div>
+
+      <div class="node-inspector" id="node-inspector-card">
+        <div class="inspector-header">
+          <h3 id="inspect-node-title">Selected Node: PC-01 (192.168.1.10)</h3>
+          <span class="badge badge-danger" id="inspect-node-badge">Compromised</span>
+        </div>
+        <div class="inspector-grid">
+          <div class="inspect-item">
+            <span class="inspect-label">Role</span>
+            <span class="inspect-val" id="inspect-role">Workstation (Marketing)</span>
+          </div>
+          <div class="inspect-item">
+            <span class="inspect-label">Hardware MAC</span>
+            <span class="inspect-val mono" id="inspect-mac">F0:18:98:23:44:11</span>
+          </div>
+          <div class="inspect-item">
+            <span class="inspect-label">Open Ports</span>
+            <span class="inspect-val mono" id="inspect-ports">445 (SMB), 3389 (RDP)</span>
+          </div>
+          <div class="inspect-item">
+            <span class="inspect-label">Blast Radius</span>
+            <span class="inspect-val danger-text" id="inspect-blast">3 Critical Targets Reachable</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right Panel: Threat Engine, Attack Path Analysis & Containment -->
+    <aside class="panel analytics-panel" id="panel-analytics">
+      <!-- Attack Path Visualizer -->
+      <div class="card attack-path-card" id="card-attack-path">
+        <div class="card-header">
+          <div class="panel-title-group">
+            <span class="panel-icon">🎯</span>
+            <h3>Lateral Attack-Path Traversal</h3>
+          </div>
+          <span class="pulse-tag active">ACTIVE HOP</span>
+        </div>
+
+        <div class="path-visual-chain" id="path-visual-chain">
+          <div class="chain-step step-compromised">
+            <div class="step-circle">01</div>
+            <div class="step-info">
+              <span class="step-name">PC-01</span>
+              <span class="step-desc">Initial Compromise</span>
+            </div>
+          </div>
+          <div class="chain-arrow">➔</div>
+          <div class="chain-step step-pivot">
+            <div class="step-circle">02</div>
+            <div class="step-info">
+              <span class="step-name">APP-SRV-01</span>
+              <span class="step-desc">SMB Pivot (Port 445)</span>
+            </div>
+          </div>
+          <div class="chain-arrow">➔</div>
+          <div class="chain-step step-target">
+            <div class="step-circle">03</div>
+            <div class="step-info">
+              <span class="step-name">DB-FINANCIAL</span>
+              <span class="step-desc">Crown Jewel Database</span>
+            </div>
+          </div>
+        </div>
+        <p class="attack-summary-text" id="attack-narrative">
+          ⚠️ <strong>Lateral Movement Alert:</strong> Workstation <code>192.168.1.10</code> established unauthorized SMB connection to <code>192.168.1.50</code>, followed by database query attempt on <code>192.168.1.100:5432</code>.
+        </p>
+      </div>
+
+      <!-- Risk Factors & Composite Scoring -->
+      <div class="card risk-scoring-card" id="card-risk-scoring">
+        <div class="card-header">
+          <div class="panel-title-group">
+            <span class="panel-icon">📊</span>
+            <h3>Multi-Factor Risk Engine</h3>
+          </div>
+          <span class="risk-number-badge" id="risk-score-display">91/100</span>
+        </div>
+
+        <div class="risk-factors-list">
+          <div class="factor-row">
+            <div class="factor-meta">
+              <span>Rapid Vertical Port Reconnaissance</span>
+              <span class="factor-points">+35 pts</span>
+            </div>
+            <div class="progress-track"><div class="progress-fill fill-amber" style="width: 70%;"></div></div>
+          </div>
+
+          <div class="factor-row">
+            <div class="factor-meta">
+              <span>Peer-to-Peer SMB/RDP Administrative Pivot</span>
+              <span class="factor-points">+45 pts</span>
+            </div>
+            <div class="progress-track"><div class="progress-fill fill-danger" style="width: 90%;"></div></div>
+          </div>
+
+          <div class="factor-row">
+            <div class="factor-meta">
+              <span>High-Value Financial DB Proximity</span>
+              <span class="factor-points">+25 pts</span>
+            </div>
+            <div class="progress-track"><div class="progress-fill fill-danger" style="width: 80%;"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Automated Containment Action Card -->
+      <div class="card containment-card" id="card-containment">
+        <div class="card-header">
+          <div class="panel-title-group">
+            <span class="panel-icon">⚡</span>
+            <h3>Adaptive Automated Containment</h3>
+          </div>
+          <span class="status-badge-live" id="containment-badge">ARMED</span>
+        </div>
+
+        <div class="containment-action-box" id="containment-box">
+          <div class="containment-meta">
+            <span class="containment-label">TARGET FOR ISOLATION</span>
+            <span class="target-ip-badge" id="quarantine-target-ip">192.168.1.10 (PC-01)</span>
+          </div>
+          <p class="containment-explanation" id="quarantine-explanation">
+            Host has exceeded critical risk threshold (91 > 85). Containment driver will generate native host firewall rules and sever active connection sockets.
+          </p>
+
+          <div class="containment-buttons">
+            <button class="btn btn-danger btn-block" id="btn-trigger-quarantine">
+              🚨 EXECUTE HOST QUARANTINE
+            </button>
+            <button class="btn btn-secondary btn-block hidden" id="btn-release-quarantine">
+              ✅ RELEASE QUARANTINE
+            </button>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Bottom Telemetry Feeds -->
+  <section class="telemetry-bottom-section">
+    <!-- Live Flow & Packet Stream -->
+    <div class="panel packet-stream-panel" id="panel-packet-stream">
+      <div class="panel-header">
+        <div class="panel-title-group">
+          <span class="panel-icon">📡</span>
+          <h3>Live Network Packet & Flow Stream</h3>
+        </div>
+        <div class="stream-stats">
+          <span class="stat-pill"><span class="dot-live"></span> 14,280 pkts/s</span>
+          <span class="stat-pill">Zero Packet Drops</span>
+        </div>
+      </div>
+
+      <div class="packet-terminal" id="packet-log-terminal">
+        <!-- Dynamically injected real-time packet logs -->
+      </div>
+    </div>
+
+    <!-- Asset Inventory Table -->
+    <div class="panel asset-inventory-panel" id="panel-asset-inventory">
+      <div class="panel-header">
+        <div class="panel-title-group">
+          <span class="panel-icon">💻</span>
+          <h3>Discovered Network Assets</h3>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table class="asset-table" id="asset-table">
+          <thead>
+            <tr>
+              <th>IP Address</th>
+              <th>Hostname</th>
+              <th>Role</th>
+              <th>Criticality</th>
+              <th>Risk Score</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="asset-table-body">
+            <!-- Dynamically populated rows -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Toast Notification System -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
