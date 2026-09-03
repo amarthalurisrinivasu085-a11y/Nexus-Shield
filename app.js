@@ -504,3 +504,137 @@ initCanvas();
 streamPackets();
 renderAssetTable();
 selectNode(selectedNode);
+
+// ==========================================================================
+// 2D Walkthrough Slider & Smooth Dashboard Transition
+// ==========================================================================
+const sliderModal = document.getElementById("slider-modal");
+const slidesTrack = document.getElementById("slides-track");
+const btnPrevSlide = document.getElementById("btn-prev-slide");
+const btnNextSlide = document.getElementById("btn-next-slide");
+const btnSkipToDashboard = document.getElementById("btn-skip-to-dashboard");
+const btnEnterOriginalSoc = document.getElementById("btn-enter-original-soc");
+const btnSlideAndSimulate = document.getElementById("btn-slide-and-simulate");
+const btnOpenSlides = document.getElementById("btn-open-slides");
+const headerDevCredit = document.getElementById("header-dev-credit");
+const slideIndicatorTabs = document.querySelectorAll(".slide-indicator-tab");
+const slideDots = document.querySelectorAll(".slide-dots .dot");
+
+let currentSlideIndex = 0;
+const totalSlides = 4;
+
+function goToSlide(index) {
+  if (index < 0 || index >= totalSlides) return;
+  currentSlideIndex = index;
+
+  // Move slide track
+  if (slidesTrack) {
+    slidesTrack.style.transform = `translateX(-${currentSlideIndex * 25}%)`;
+  }
+
+  // Update indicator tabs
+  slideIndicatorTabs.forEach((tab, i) => {
+    tab.classList.toggle("active", i === currentSlideIndex);
+  });
+
+  // Update dots
+  slideDots.forEach((dot, i) => {
+    dot.classList.toggle("active", i === currentSlideIndex);
+  });
+
+  // Update navigation buttons
+  if (btnPrevSlide) {
+    btnPrevSlide.disabled = currentSlideIndex === 0;
+  }
+  if (btnNextSlide) {
+    if (currentSlideIndex === totalSlides - 1) {
+      btnNextSlide.innerHTML = "Finish & Enter SOC ➔";
+    } else {
+      btnNextSlide.innerHTML = "Next Slide →";
+    }
+  }
+}
+
+function slideToDashboard(andSimulate = false) {
+  if (sliderModal) {
+    sliderModal.classList.add("slide-out");
+  }
+  if (andSimulate) {
+    setTimeout(() => {
+      btnSimulate.click();
+      showToast("⚡ Launching live multi-stage attack simulation demonstration...");
+    }, 400);
+  } else {
+    showToast("🛡️ Welcome to NEXUS-SHIELD Live Defense Operations Center.");
+  }
+}
+
+function openSliderModal() {
+  if (sliderModal) {
+    sliderModal.classList.remove("slide-out");
+  }
+}
+
+if (btnPrevSlide) {
+  btnPrevSlide.addEventListener("click", () => {
+    goToSlide(currentSlideIndex - 1);
+  });
+}
+
+if (btnNextSlide) {
+  btnNextSlide.addEventListener("click", () => {
+    if (currentSlideIndex < totalSlides - 1) {
+      goToSlide(currentSlideIndex + 1);
+    } else {
+      slideToDashboard(false);
+    }
+  });
+}
+
+slideIndicatorTabs.forEach((tab) => {
+  tab.addEventListener("click", () => {
+    const slideIdx = parseInt(tab.dataset.slide, 10);
+    goToSlide(slideIdx);
+  });
+});
+
+slideDots.forEach((dot) => {
+  dot.addEventListener("click", () => {
+    const slideIdx = parseInt(dot.dataset.slide, 10);
+    goToSlide(slideIdx);
+  });
+});
+
+if (btnSkipToDashboard) {
+  btnSkipToDashboard.addEventListener("click", () => slideToDashboard(false));
+}
+
+if (btnEnterOriginalSoc) {
+  btnEnterOriginalSoc.addEventListener("click", () => slideToDashboard(false));
+}
+
+if (btnSlideAndSimulate) {
+  btnSlideAndSimulate.addEventListener("click", () => slideToDashboard(true));
+}
+
+if (btnOpenSlides) {
+  btnOpenSlides.addEventListener("click", openSliderModal);
+}
+
+if (headerDevCredit) {
+  headerDevCredit.addEventListener("click", openSliderModal);
+}
+
+// Keyboard shortcuts for slider navigation
+document.addEventListener("keydown", (e) => {
+  if (sliderModal && !sliderModal.classList.contains("slide-out")) {
+    if (e.key === "ArrowRight") {
+      if (currentSlideIndex < totalSlides - 1) goToSlide(currentSlideIndex + 1);
+    } else if (e.key === "ArrowLeft") {
+      if (currentSlideIndex > 0) goToSlide(currentSlideIndex - 1);
+    } else if (e.key === "Escape") {
+      slideToDashboard(false);
+    }
+  }
+});
+

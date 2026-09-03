@@ -11,6 +11,304 @@
   <link rel="stylesheet" href="index.css">
 </head>
 <body class="dark-theme">
+  <!-- 2D Interactive Project Overview & Walkthrough Slider -->
+  <div class="slider-modal-overlay" id="slider-modal">
+    <div class="slider-container">
+      <!-- Top Navigation & Developer Attribution -->
+      <div class="slider-topbar">
+        <div class="slider-brand">
+          <span class="shield-badge">🛡️</span>
+          <div>
+            <div class="slider-title-line">
+              <span class="slider-title">NEXUS-SHIELD</span>
+              <span class="slider-version">v2.6.4</span>
+            </div>
+            <span class="slider-subtitle">Adaptive Threat Detection & Containment Platform</span>
+          </div>
+        </div>
+
+        <!-- Prominent Developer Attribution -->
+        <div class="dev-feature-badge">
+          <span class="dev-badge-icon">👨‍💻</span>
+          <div class="dev-badge-text">
+            <span class="dev-badge-sub">DEVELOPED BY</span>
+            <span class="dev-badge-title">Amarthaluri Srinivasu</span>
+          </div>
+        </div>
+
+        <button class="slider-skip-btn" id="btn-skip-to-dashboard" title="Slide to original SOC Dashboard">
+          <span>Slide to Dashboard</span> ➔
+        </button>
+      </div>
+
+      <!-- Slide Navigation Indicator Bar -->
+      <div class="slide-indicator-bar">
+        <button class="slide-indicator-tab active" data-slide="0">
+          <span class="tab-num">01</span>
+          <span class="tab-text">Overview & Problem</span>
+        </button>
+        <button class="slide-indicator-tab" data-slide="1">
+          <span class="tab-num">02</span>
+          <span class="tab-text">How It Works (5 Engines)</span>
+        </button>
+        <button class="slide-indicator-tab" data-slide="2">
+          <span class="tab-num">03</span>
+          <span class="tab-text">Attack Kill-Chain Demo</span>
+        </button>
+        <button class="slide-indicator-tab" data-slide="3">
+          <span class="tab-num">04</span>
+          <span class="tab-text">Developer & Specifications</span>
+        </button>
+      </div>
+
+      <!-- Slides Wrapper with Smooth 2D Slide Transitions -->
+      <div class="slides-viewport">
+        <div class="slides-track" id="slides-track">
+          
+          <!-- SLIDE 1: What is NEXUS-SHIELD & What Does It Do? -->
+          <div class="slide-item" data-index="0">
+            <div class="slide-hero">
+              <span class="slide-pill">STAGE 1 / 4 • PLATFORM OVERVIEW</span>
+              <h2 class="slide-heading">What is NEXUS-SHIELD & What Problem Does It Solve?</h2>
+              <p class="slide-lead">
+                Enterprise perimeter firewalls and basic antivirus are blind to <strong>lateral movement</strong>. Once an attacker breaches a single workstation, they quietly traverse internal protocols (SMB, RDP, WMI) toward your most critical databases.
+              </p>
+            </div>
+
+            <div class="slide-2d-grid">
+              <div class="card-2d">
+                <div class="card-2d-icon">🌐</div>
+                <h3>Dynamic Network Graph $G = (V, E)$</h3>
+                <p>NEXUS-SHIELD maintains a real-time, in-memory topological graph. Nodes are verified endpoints; edges are live protocol communication flows with directional weights.</p>
+              </div>
+
+              <div class="card-2d">
+                <div class="card-2d-icon">🧠</div>
+                <h3>Behavioral Anomaly Baselines</h3>
+                <p>Profiles normal peer-to-peer traffic patterns. Any unusual workstation-to-workstation administrative connection (e.g. PC to PC over port 445) immediately flags an alarm.</p>
+              </div>
+
+              <div class="card-2d">
+                <div class="card-2d-icon">🎯</div>
+                <h3>Blast Radius & Attack Paths</h3>
+                <p>Calculates the shortest graph paths from any suspicious machine to high-value crown jewels (Domain Controllers, SQL databases), scoring composite risk from 0 to 100.</p>
+              </div>
+
+              <div class="card-2d">
+                <div class="card-2d-icon">⚡</div>
+                <h3>Sub-Second Automated Quarantine</h3>
+                <p>When threat scores exceed threshold (85+), the containment engine automatically issues native Windows Firewall rules, instantly severing malicious sockets.</p>
+              </div>
+            </div>
+
+            <div class="telemetry-callout">
+              <div class="callout-pill"><span class="callout-dot green"></span> <strong>0.4ms</strong> Detection Latency</div>
+              <div class="callout-pill"><span class="callout-dot cyan"></span> <strong>L2–L7</strong> Full Protocol Inspection</div>
+              <div class="callout-pill"><span class="callout-dot purple"></span> <strong>Zero-Trust</strong> Native Host Containment</div>
+            </div>
+          </div>
+
+          <!-- SLIDE 2: How It Works - The 5 Defense Engines -->
+          <div class="slide-item" data-index="1">
+            <div class="slide-hero">
+              <span class="slide-pill">STAGE 2 / 4 • HOW IT WORKS</span>
+              <h2 class="slide-heading">The 5 Core Autonomous Defense Engines</h2>
+              <p class="slide-lead">
+                Built from the ground up with a modular architecture that turns raw packet streams into actionable, automated containment.
+              </p>
+            </div>
+
+            <div class="pipeline-2d-container">
+              <div class="pipe-step">
+                <div class="pipe-badge">01</div>
+                <div class="pipe-body">
+                  <h4>Packet Sniffing & Flow Parser</h4>
+                  <p>Asynchronous capture captures raw frames and decodes Ethernet, ARP, IPv4, TCP, UDP, and ICMP, maintaining bidirectional state tables.</p>
+                  <span class="code-pill">core/capture.py • core/flow_tracker.py</span>
+                </div>
+              </div>
+
+              <div class="pipe-step">
+                <div class="pipe-badge">02</div>
+                <div class="pipe-body">
+                  <h4>Continuous Asset Discovery</h4>
+                  <p>Passively and actively fingerprints IP, MAC manufacturer, hostname, OS type, and open listening ports, categorizing asset criticality.</p>
+                  <span class="code-pill">discovery/asset_inventory.py</span>
+                </div>
+              </div>
+
+              <div class="pipe-step">
+                <div class="pipe-badge">03</div>
+                <div class="pipe-body">
+                  <h4>Multi-Vector Threat Detectors</h4>
+                  <p>Detects horizontal port sweeps, stealth vertical scans, and unauthorized peer-to-peer administrative pivots (SMB 445, RDP 3389).</p>
+                  <span class="code-pill">detector/port_scan.py • detector/lateral_movement.py</span>
+                </div>
+              </div>
+
+              <div class="pipe-step">
+                <div class="pipe-badge">04</div>
+                <div class="pipe-body">
+                  <h4>In-Memory Attack Path Graph</h4>
+                  <p>NetworkX directed graph evaluates shortest paths to sensitive servers and quantifies total blast radius around compromised nodes.</p>
+                  <span class="code-pill">graph/network_graph.py • engine/risk_scorer.py</span>
+                </div>
+              </div>
+
+              <div class="pipe-step">
+                <div class="pipe-badge">05</div>
+                <div class="pipe-body">
+                  <h4>Automated Windows Firewall Quarantine</h4>
+                  <p>Generates and applies native <code>netsh advfirewall</code> rules to instantly block outbound network traffic from infected machines.</p>
+                  <span class="code-pill">containment/quarantine.py</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SLIDE 3: Live Attack Scenario -->
+          <div class="slide-item" data-index="2">
+            <div class="slide-hero">
+              <span class="slide-pill">STAGE 3 / 4 • ATTACK SIMULATION</span>
+              <h2 class="slide-heading">The Simulated Multi-Hop Attack Kill-Chain</h2>
+              <p class="slide-lead">
+                Here is the real-world attack sequence simulated inside the platform and demonstrated in real-time on the live graph.
+              </p>
+            </div>
+
+            <div class="attack-visual-diagram">
+              <div class="diagram-node node-infected">
+                <div class="d-icon">💻</div>
+                <div class="d-title">PC-01 (Marketing)</div>
+                <div class="d-ip">192.168.1.10</div>
+                <div class="d-status red">INITIAL COMPROMISE</div>
+                <p class="d-desc">Attacker gains shell via phishing. Begins rapid vertical port sweep across 10 internal ports.</p>
+              </div>
+
+              <div class="diagram-connector">
+                <div class="connector-line red-pulse"></div>
+                <div class="connector-label">Port Scan Detected (+35 pts)</div>
+                <div class="connector-arrow">➔</div>
+              </div>
+
+              <div class="diagram-node node-pivot">
+                <div class="d-icon">🖥️</div>
+                <div class="d-title">APP-SRV-01</div>
+                <div class="d-ip">192.168.1.50</div>
+                <div class="d-status amber">LATERAL PIVOT</div>
+                <p class="d-desc">Attacker uses stolen credentials over SMB (Port 445) to pivot to the internal application server.</p>
+              </div>
+
+              <div class="diagram-connector">
+                <div class="connector-line danger-pulse"></div>
+                <div class="connector-label">Lateral Hop Flagged (+45 pts)</div>
+                <div class="connector-arrow">➔</div>
+              </div>
+
+              <div class="diagram-node node-target">
+                <div class="d-icon">🗄️</div>
+                <div class="d-title">DB-FINANCIAL</div>
+                <div class="d-ip">192.168.1.100</div>
+                <div class="d-status purple">CROWN JEWEL</div>
+                <p class="d-desc">High-value production database holding sensitive financial records. Blast proximity (+25 pts).</p>
+              </div>
+            </div>
+
+            <div class="scenario-outcome-banner">
+              <div class="outcome-badge">🚨 OUTCOME: RISK SCORE 91 / 100 [CRITICAL]</div>
+              <p>NEXUS-SHIELD automatically isolates <code>192.168.1.10</code> before data exfiltration occurs, applying firewall rule <code>NEXUS-ISOLATE-192.168.1.10</code> in under 4 milliseconds.</p>
+            </div>
+          </div>
+
+          <!-- SLIDE 4: Developer Profile & Specifications -->
+          <div class="slide-item" data-index="3">
+            <div class="slide-hero">
+              <span class="slide-pill">STAGE 4 / 4 • DEVELOPER & SPECS</span>
+              <h2 class="slide-heading">Developer Credentials & Platform Architecture</h2>
+              <p class="slide-lead">
+                Engineered with enterprise cybersecurity principles to provide comprehensive, transparent network defense.
+              </p>
+            </div>
+
+            <div class="dev-showcase-box">
+              <div class="dev-main-info">
+                <div class="dev-avatar-circle">AS</div>
+                <div class="dev-titles">
+                  <h3 class="dev-name-large">Amarthaluri Srinivasu</h3>
+                  <p class="dev-role-large">Lead Cybersecurity Architect & Systems Developer</p>
+                  <div class="dev-tag-row">
+                    <span class="dev-pill-accent">🛡️ NEXUS-SHIELD Creator</span>
+                    <span class="dev-pill-accent">⚡ Network Defense Researcher</span>
+                    <span class="dev-pill-accent">🔒 Zero-Trust Systems</span>
+                  </div>
+                </div>
+              </div>
+              <p class="dev-mission-statement">
+                "NEXUS-SHIELD was conceived and engineered to bridge the critical gap between traditional static IDS rules and modern graph-theoretic threat containment. By combining in-memory graph traversal with automated host firewall orchestration, defense shifts from passive alerting to active, real-time mitigation."
+              </p>
+            </div>
+
+            <div class="tech-specs-grid">
+              <div class="spec-item">
+                <span class="spec-label">CORE LANGUAGE</span>
+                <span class="spec-val">Python 3.12 (Native Windows)</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">PACKET INGESTION</span>
+                <span class="spec-val">Scapy Asynchronous Sniffer</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">GRAPH ENGINE</span>
+                <span class="spec-val">NetworkX In-Memory Directed Graph</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">CONTAINMENT API</span>
+                <span class="spec-val">Windows Firewall (`netsh advfirewall`)</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">FRONTEND UI</span>
+                <span class="spec-val">Vanilla HTML5 / Modern CSS3 / JS Canvas</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-label">DEPLOYMENT</span>
+                <span class="spec-val">Localhost Server & GitHub Repository</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Slide Navigation Footer Controls -->
+      <div class="slider-footer">
+        <div class="footer-left">
+          <button class="btn btn-outline" id="btn-prev-slide" disabled>
+            ← Previous
+          </button>
+          <button class="btn btn-primary" id="btn-next-slide">
+            Next Slide →
+          </button>
+        </div>
+
+        <div class="slide-dots" id="slide-dots">
+          <span class="dot active" data-slide="0"></span>
+          <span class="dot" data-slide="1"></span>
+          <span class="dot" data-slide="2"></span>
+          <span class="dot" data-slide="3"></span>
+        </div>
+
+        <div class="footer-right">
+          <button class="btn btn-outline" id="btn-enter-original-soc">
+            <span>🚀 Slide to Original SOC Dashboard</span>
+          </button>
+          <button class="btn btn-danger" id="btn-slide-and-simulate">
+            <span>⚡ Slide & Run Live Simulation</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Top Defense Status Header -->
   <header class="header" id="main-header">
     <div class="brand-section">
@@ -24,6 +322,15 @@
           <span class="version-badge">v2.6.4</span>
         </div>
         <p class="brand-subtitle">Real-Time Adaptive Network Threat Detection & Containment Platform</p>
+      </div>
+    </div>
+
+    <!-- Developer Credit in Dashboard Header -->
+    <div class="dev-header-pill" id="header-dev-credit" title="Click to view 2D Project Overview Slides">
+      <span class="dev-pill-icon">👨‍💻</span>
+      <div class="dev-pill-text">
+        <span class="dev-pill-label">DEVELOPED BY</span>
+        <span class="dev-pill-name">Amarthaluri Srinivasu</span>
       </div>
     </div>
 
@@ -61,13 +368,16 @@
 
     <!-- Control Actions -->
     <div class="header-actions">
+      <button class="btn btn-primary" id="btn-open-slides">
+        <span class="btn-icon">📖</span> Project Guide & Slides
+      </button>
       <button class="btn btn-danger" id="btn-simulate-attack">
         <span class="btn-icon">⚡</span> Run Attack Simulation
       </button>
       <button class="btn btn-outline" id="btn-reset-baseline">
         <span class="btn-icon">🔄</span> Reset Baseline
       </button>
-      <button class="btn btn-primary" id="btn-export-report">
+      <button class="btn btn-outline" id="btn-export-report">
         <span class="btn-icon">📥</span> Export Incident Log
       </button>
     </div>
