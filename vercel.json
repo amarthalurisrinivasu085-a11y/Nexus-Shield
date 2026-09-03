@@ -1,6 +1,4 @@
 {
-  "version": 2,
-  "name": "nexus-shield",
   "cleanUrls": true,
   "trailingSlash": false,
   "headers": [
