@@ -3,598 +3,345 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NEXUS-SHIELD | Adaptive Network Threat Detection & Containment Platform</title>
-  <meta name="description" content="Real-Time Adaptive Network Threat Detection, Attack-Path Analysis & Automated Containment Platform. Continuous network monitoring, behavioral baseline anomaly scoring, and automated host isolation.">
+  <title>NEXUS-SHIELD | Adaptive Network Threat Defense</title>
+  <meta name="description" content="Simple, Real-Time Adaptive Network Threat Detection & Automated Containment Platform developed by Amarthaluri Srinivasu.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="index.css">
 </head>
-<body class="dark-theme">
-  <!-- 2D Interactive Project Overview & Walkthrough Slider -->
-  <div class="slider-modal-overlay" id="slider-modal">
-    <div class="slider-container">
-      <!-- Top Navigation & Developer Attribution -->
-      <div class="slider-topbar">
-        <div class="slider-brand">
-          <span class="shield-badge">🛡️</span>
-          <div>
-            <div class="slider-title-line">
-              <span class="slider-title">NEXUS-SHIELD</span>
-              <span class="slider-version">v2.6.4</span>
-            </div>
-            <span class="slider-subtitle">Adaptive Threat Detection & Containment Platform</span>
+<body class="clean-theme">
+
+  <!-- Simple, Elegant Top Navbar -->
+  <header class="navbar">
+    <div class="nav-left">
+      <div class="brand-logo">
+        <span class="logo-shield">🛡️</span>
+        <div>
+          <div class="brand-title-line">
+            <span class="brand-name">NEXUS-SHIELD</span>
+            <span class="badge-version">v2.6</span>
           </div>
-        </div>
-
-        <!-- Prominent Developer Attribution -->
-        <div class="dev-feature-badge">
-          <span class="dev-badge-icon">👨‍💻</span>
-          <div class="dev-badge-text">
-            <span class="dev-badge-sub">DEVELOPED BY</span>
-            <span class="dev-badge-title">Amarthaluri Srinivasu</span>
-          </div>
-        </div>
-
-        <button class="slider-skip-btn" id="btn-skip-to-dashboard" title="Slide to original SOC Dashboard">
-          <span>Slide to Dashboard</span> ➔
-        </button>
-      </div>
-
-      <!-- Slide Navigation Indicator Bar -->
-      <div class="slide-indicator-bar">
-        <button class="slide-indicator-tab active" data-slide="0">
-          <span class="tab-num">01</span>
-          <span class="tab-text">Overview & Problem</span>
-        </button>
-        <button class="slide-indicator-tab" data-slide="1">
-          <span class="tab-num">02</span>
-          <span class="tab-text">How It Works (5 Engines)</span>
-        </button>
-        <button class="slide-indicator-tab" data-slide="2">
-          <span class="tab-num">03</span>
-          <span class="tab-text">Attack Kill-Chain Demo</span>
-        </button>
-        <button class="slide-indicator-tab" data-slide="3">
-          <span class="tab-num">04</span>
-          <span class="tab-text">Developer & Specifications</span>
-        </button>
-      </div>
-
-      <!-- Slides Wrapper with Smooth 2D Slide Transitions -->
-      <div class="slides-viewport">
-        <div class="slides-track" id="slides-track">
-          
-          <!-- SLIDE 1: What is NEXUS-SHIELD & What Does It Do? -->
-          <div class="slide-item" data-index="0">
-            <div class="slide-hero">
-              <span class="slide-pill">STAGE 1 / 4 • PLATFORM OVERVIEW</span>
-              <h2 class="slide-heading">What is NEXUS-SHIELD & What Problem Does It Solve?</h2>
-              <p class="slide-lead">
-                Enterprise perimeter firewalls and basic antivirus are blind to <strong>lateral movement</strong>. Once an attacker breaches a single workstation, they quietly traverse internal protocols (SMB, RDP, WMI) toward your most critical databases.
-              </p>
-            </div>
-
-            <div class="slide-2d-grid">
-              <div class="card-2d">
-                <div class="card-2d-icon">🌐</div>
-                <h3>Dynamic Network Graph $G = (V, E)$</h3>
-                <p>NEXUS-SHIELD maintains a real-time, in-memory topological graph. Nodes are verified endpoints; edges are live protocol communication flows with directional weights.</p>
-              </div>
-
-              <div class="card-2d">
-                <div class="card-2d-icon">🧠</div>
-                <h3>Behavioral Anomaly Baselines</h3>
-                <p>Profiles normal peer-to-peer traffic patterns. Any unusual workstation-to-workstation administrative connection (e.g. PC to PC over port 445) immediately flags an alarm.</p>
-              </div>
-
-              <div class="card-2d">
-                <div class="card-2d-icon">🎯</div>
-                <h3>Blast Radius & Attack Paths</h3>
-                <p>Calculates the shortest graph paths from any suspicious machine to high-value crown jewels (Domain Controllers, SQL databases), scoring composite risk from 0 to 100.</p>
-              </div>
-
-              <div class="card-2d">
-                <div class="card-2d-icon">⚡</div>
-                <h3>Sub-Second Automated Quarantine</h3>
-                <p>When threat scores exceed threshold (85+), the containment engine automatically issues native Windows Firewall rules, instantly severing malicious sockets.</p>
-              </div>
-            </div>
-
-            <div class="telemetry-callout">
-              <div class="callout-pill"><span class="callout-dot green"></span> <strong>0.4ms</strong> Detection Latency</div>
-              <div class="callout-pill"><span class="callout-dot cyan"></span> <strong>L2–L7</strong> Full Protocol Inspection</div>
-              <div class="callout-pill"><span class="callout-dot purple"></span> <strong>Zero-Trust</strong> Native Host Containment</div>
-            </div>
-          </div>
-
-          <!-- SLIDE 2: How It Works - The 5 Defense Engines -->
-          <div class="slide-item" data-index="1">
-            <div class="slide-hero">
-              <span class="slide-pill">STAGE 2 / 4 • HOW IT WORKS</span>
-              <h2 class="slide-heading">The 5 Core Autonomous Defense Engines</h2>
-              <p class="slide-lead">
-                Built from the ground up with a modular architecture that turns raw packet streams into actionable, automated containment.
-              </p>
-            </div>
-
-            <div class="pipeline-2d-container">
-              <div class="pipe-step">
-                <div class="pipe-badge">01</div>
-                <div class="pipe-body">
-                  <h4>Packet Sniffing & Flow Parser</h4>
-                  <p>Asynchronous capture captures raw frames and decodes Ethernet, ARP, IPv4, TCP, UDP, and ICMP, maintaining bidirectional state tables.</p>
-                  <span class="code-pill">core/capture.py • core/flow_tracker.py</span>
-                </div>
-              </div>
-
-              <div class="pipe-step">
-                <div class="pipe-badge">02</div>
-                <div class="pipe-body">
-                  <h4>Continuous Asset Discovery</h4>
-                  <p>Passively and actively fingerprints IP, MAC manufacturer, hostname, OS type, and open listening ports, categorizing asset criticality.</p>
-                  <span class="code-pill">discovery/asset_inventory.py</span>
-                </div>
-              </div>
-
-              <div class="pipe-step">
-                <div class="pipe-badge">03</div>
-                <div class="pipe-body">
-                  <h4>Multi-Vector Threat Detectors</h4>
-                  <p>Detects horizontal port sweeps, stealth vertical scans, and unauthorized peer-to-peer administrative pivots (SMB 445, RDP 3389).</p>
-                  <span class="code-pill">detector/port_scan.py • detector/lateral_movement.py</span>
-                </div>
-              </div>
-
-              <div class="pipe-step">
-                <div class="pipe-badge">04</div>
-                <div class="pipe-body">
-                  <h4>In-Memory Attack Path Graph</h4>
-                  <p>NetworkX directed graph evaluates shortest paths to sensitive servers and quantifies total blast radius around compromised nodes.</p>
-                  <span class="code-pill">graph/network_graph.py • engine/risk_scorer.py</span>
-                </div>
-              </div>
-
-              <div class="pipe-step">
-                <div class="pipe-badge">05</div>
-                <div class="pipe-body">
-                  <h4>Automated Windows Firewall Quarantine</h4>
-                  <p>Generates and applies native <code>netsh advfirewall</code> rules to instantly block outbound network traffic from infected machines.</p>
-                  <span class="code-pill">containment/quarantine.py</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- SLIDE 3: Live Attack Scenario -->
-          <div class="slide-item" data-index="2">
-            <div class="slide-hero">
-              <span class="slide-pill">STAGE 3 / 4 • ATTACK SIMULATION</span>
-              <h2 class="slide-heading">The Simulated Multi-Hop Attack Kill-Chain</h2>
-              <p class="slide-lead">
-                Here is the real-world attack sequence simulated inside the platform and demonstrated in real-time on the live graph.
-              </p>
-            </div>
-
-            <div class="attack-visual-diagram">
-              <div class="diagram-node node-infected">
-                <div class="d-icon">💻</div>
-                <div class="d-title">PC-01 (Marketing)</div>
-                <div class="d-ip">192.168.1.10</div>
-                <div class="d-status red">INITIAL COMPROMISE</div>
-                <p class="d-desc">Attacker gains shell via phishing. Begins rapid vertical port sweep across 10 internal ports.</p>
-              </div>
-
-              <div class="diagram-connector">
-                <div class="connector-line red-pulse"></div>
-                <div class="connector-label">Port Scan Detected (+35 pts)</div>
-                <div class="connector-arrow">➔</div>
-              </div>
-
-              <div class="diagram-node node-pivot">
-                <div class="d-icon">🖥️</div>
-                <div class="d-title">APP-SRV-01</div>
-                <div class="d-ip">192.168.1.50</div>
-                <div class="d-status amber">LATERAL PIVOT</div>
-                <p class="d-desc">Attacker uses stolen credentials over SMB (Port 445) to pivot to the internal application server.</p>
-              </div>
-
-              <div class="diagram-connector">
-                <div class="connector-line danger-pulse"></div>
-                <div class="connector-label">Lateral Hop Flagged (+45 pts)</div>
-                <div class="connector-arrow">➔</div>
-              </div>
-
-              <div class="diagram-node node-target">
-                <div class="d-icon">🗄️</div>
-                <div class="d-title">DB-FINANCIAL</div>
-                <div class="d-ip">192.168.1.100</div>
-                <div class="d-status purple">CROWN JEWEL</div>
-                <p class="d-desc">High-value production database holding sensitive financial records. Blast proximity (+25 pts).</p>
-              </div>
-            </div>
-
-            <div class="scenario-outcome-banner">
-              <div class="outcome-badge">🚨 OUTCOME: RISK SCORE 91 / 100 [CRITICAL]</div>
-              <p>NEXUS-SHIELD automatically isolates <code>192.168.1.10</code> before data exfiltration occurs, applying firewall rule <code>NEXUS-ISOLATE-192.168.1.10</code> in under 4 milliseconds.</p>
-            </div>
-          </div>
-
-          <!-- SLIDE 4: Developer Profile & Specifications -->
-          <div class="slide-item" data-index="3">
-            <div class="slide-hero">
-              <span class="slide-pill">STAGE 4 / 4 • DEVELOPER & SPECS</span>
-              <h2 class="slide-heading">Developer Credentials & Platform Architecture</h2>
-              <p class="slide-lead">
-                Engineered with enterprise cybersecurity principles to provide comprehensive, transparent network defense.
-              </p>
-            </div>
-
-            <div class="dev-showcase-box">
-              <div class="dev-main-info">
-                <div class="dev-avatar-circle">AS</div>
-                <div class="dev-titles">
-                  <h3 class="dev-name-large">Amarthaluri Srinivasu</h3>
-                  <p class="dev-role-large">Lead Cybersecurity Architect & Systems Developer</p>
-                  <div class="dev-tag-row">
-                    <span class="dev-pill-accent">🛡️ NEXUS-SHIELD Creator</span>
-                    <span class="dev-pill-accent">⚡ Network Defense Researcher</span>
-                    <span class="dev-pill-accent">🔒 Zero-Trust Systems</span>
-                  </div>
-                </div>
-              </div>
-              <p class="dev-mission-statement">
-                "NEXUS-SHIELD was conceived and engineered to bridge the critical gap between traditional static IDS rules and modern graph-theoretic threat containment. By combining in-memory graph traversal with automated host firewall orchestration, defense shifts from passive alerting to active, real-time mitigation."
-              </p>
-            </div>
-
-            <div class="tech-specs-grid">
-              <div class="spec-item">
-                <span class="spec-label">CORE LANGUAGE</span>
-                <span class="spec-val">Python 3.12 (Native Windows)</span>
-              </div>
-              <div class="spec-item">
-                <span class="spec-label">PACKET INGESTION</span>
-                <span class="spec-val">Scapy Asynchronous Sniffer</span>
-              </div>
-              <div class="spec-item">
-                <span class="spec-label">GRAPH ENGINE</span>
-                <span class="spec-val">NetworkX In-Memory Directed Graph</span>
-              </div>
-              <div class="spec-item">
-                <span class="spec-label">CONTAINMENT API</span>
-                <span class="spec-val">Windows Firewall (`netsh advfirewall`)</span>
-              </div>
-              <div class="spec-item">
-                <span class="spec-label">FRONTEND UI</span>
-                <span class="spec-val">Vanilla HTML5 / Modern CSS3 / JS Canvas</span>
-              </div>
-              <div class="spec-item">
-                <span class="spec-label">DEPLOYMENT</span>
-                <span class="spec-val">Localhost Server & GitHub Repository</span>
-              </div>
-            </div>
-          </div>
-
+          <span class="brand-desc">Adaptive Network Threat Defense</span>
         </div>
       </div>
 
-      <!-- Slide Navigation Footer Controls -->
-      <div class="slider-footer">
-        <div class="footer-left">
-          <button class="btn btn-outline" id="btn-prev-slide" disabled>
-            ← Previous
-          </button>
-          <button class="btn btn-primary" id="btn-next-slide">
-            Next Slide →
-          </button>
-        </div>
-
-        <div class="slide-dots" id="slide-dots">
-          <span class="dot active" data-slide="0"></span>
-          <span class="dot" data-slide="1"></span>
-          <span class="dot" data-slide="2"></span>
-          <span class="dot" data-slide="3"></span>
-        </div>
-
-        <div class="footer-right">
-          <button class="btn btn-outline" id="btn-enter-original-soc">
-            <span>🚀 Slide to Original SOC Dashboard</span>
-          </button>
-          <button class="btn btn-danger" id="btn-slide-and-simulate">
-            <span>⚡ Slide & Run Live Simulation</span>
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Top Defense Status Header -->
-  <header class="header" id="main-header">
-    <div class="brand-section">
-      <div class="logo-container">
-        <div class="pulse-ring"></div>
-        <div class="shield-icon">🛡️</div>
-      </div>
-      <div>
-        <div class="brand-title-wrap">
-          <h1 class="brand-title">NEXUS-SHIELD</h1>
-          <span class="version-badge">v2.6.4</span>
-        </div>
-        <p class="brand-subtitle">Real-Time Adaptive Network Threat Detection & Containment Platform</p>
-      </div>
-    </div>
-
-    <!-- Developer Credit in Dashboard Header -->
-    <div class="dev-header-pill" id="header-dev-credit" title="Click to view 2D Project Overview Slides">
-      <span class="dev-pill-icon">👨‍💻</span>
-      <div class="dev-pill-text">
-        <span class="dev-pill-label">DEVELOPED BY</span>
-        <span class="dev-pill-name">Amarthaluri Srinivasu</span>
-      </div>
-    </div>
-
-    <!-- Live Grid Telemetry Pills -->
-    <div class="telemetry-bar">
-      <div class="metric-card" id="metric-threat-level">
-        <span class="metric-label">DEFCON LEVEL</span>
-        <div class="metric-value-wrap">
-          <span class="threat-dot danger-pulse"></span>
-          <span class="metric-value danger-text" id="defcon-value">LEVEL 2 (ELEVATED)</span>
-        </div>
-      </div>
-
-      <div class="metric-card" id="metric-risk-index">
-        <span class="metric-label">GLOBAL THREAT RISK</span>
-        <div class="metric-value-wrap">
-          <span class="metric-value highlight-amber" id="global-risk-value">91 / 100</span>
-          <span class="severity-pill critical" id="global-risk-badge">CRITICAL</span>
-        </div>
-      </div>
-
-      <div class="metric-card" id="metric-nodes-monitored">
-        <span class="metric-label">DISCOVERED ASSETS</span>
-        <span class="metric-value" id="asset-count-val">5 NODES</span>
-      </div>
-
-      <div class="metric-card" id="metric-containment-status">
-        <span class="metric-label">CONTAINMENT ENGINE</span>
-        <div class="metric-value-wrap">
-          <span class="status-indicator online"></span>
-          <span class="metric-value active-green" id="containment-engine-status">ARMED & ACTIVE</span>
+      <!-- Prominent Developer Credit -->
+      <div class="dev-badge" id="btn-dev-info" title="Click to view developer info">
+        <span class="dev-icon">👨‍💻</span>
+        <div class="dev-text">
+          <span class="dev-tag">DEVELOPED BY</span>
+          <span class="dev-name">Amarthaluri Srinivasu</span>
         </div>
       </div>
     </div>
 
-    <!-- Control Actions -->
-    <div class="header-actions">
-      <button class="btn btn-primary" id="btn-open-slides">
-        <span class="btn-icon">📖</span> Project Guide & Slides
+    <!-- Quick Status & Actions -->
+    <div class="nav-right">
+      <div class="system-status-pill" id="global-status-pill">
+        <span class="status-dot green" id="status-dot"></span>
+        <span class="status-text" id="status-text">NETWORK SECURE</span>
+      </div>
+
+      <button class="btn btn-primary" id="btn-sim-attack">
+        <span>⚡ Simulate Threat & Defend</span>
       </button>
-      <button class="btn btn-danger" id="btn-simulate-attack">
-        <span class="btn-icon">⚡</span> Run Attack Simulation
+
+      <button class="btn btn-secondary" id="btn-reset">
+        <span>🔄 Reset</span>
       </button>
-      <button class="btn btn-outline" id="btn-reset-baseline">
-        <span class="btn-icon">🔄</span> Reset Baseline
-      </button>
-      <button class="btn btn-outline" id="btn-export-report">
-        <span class="btn-icon">📥</span> Export Incident Log
+
+      <button class="btn btn-outline" id="btn-open-drawer">
+        <span>ℹ️ How It Works</span>
       </button>
     </div>
   </header>
 
-  <!-- Main Security Dashboard Grid -->
-  <main class="dashboard-grid">
-    <!-- Left Panel: Live Dynamic Network Security Graph -->
-    <section class="panel graph-panel" id="panel-network-graph">
-      <div class="panel-header">
-        <div class="panel-title-group">
-          <span class="panel-icon">🌐</span>
-          <h2>Live Network Topology & Attack-Path Graph</h2>
+  <main class="dashboard-main">
+    
+    <!-- Big, Clear Status Banner -->
+    <section class="hero-status-banner secure" id="hero-banner">
+      <div class="banner-icon-wrap" id="banner-icon">
+        <span class="banner-icon">🛡️</span>
+      </div>
+      <div class="banner-text">
+        <div class="banner-headline-row">
+          <h1 class="banner-headline" id="banner-title">Network Protected: All 5 Devices Safe</h1>
+          <span class="threat-level-tag safe" id="banner-tag">THREAT LEVEL: LOW</span>
         </div>
-        <div class="graph-legend">
-          <span class="legend-item"><span class="legend-dot dot-normal"></span> Normal Node</span>
-          <span class="legend-item"><span class="legend-dot dot-pivot"></span> Compromised / Pivot</span>
-          <span class="legend-item"><span class="legend-dot dot-target"></span> Crown Jewel Target</span>
-          <span class="legend-item"><span class="legend-dot dot-isolated"></span> Quarantined</span>
+        <p class="banner-subtext" id="banner-desc">
+          Continuous in-memory monitoring is active. Lateral movement detectors and zero-trust Windows Firewall containment are armed.
+        </p>
+      </div>
+      <div class="banner-quick-metric">
+        <span class="metric-big" id="banner-score">5</span>
+        <span class="metric-unit">/100 Risk</span>
+      </div>
+    </section>
+
+    <!-- Clean 2D Network Device Topology Map -->
+    <section class="section-network-map">
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <span class="sec-icon">🌐</span>
+          <h2>Live Network Devices & Connection Flow</h2>
         </div>
+        <span class="hint-text">💡 Click any device to view live details</span>
       </div>
 
-      <div class="canvas-wrapper">
-        <canvas id="networkGraphCanvas" width="900" height="540"></canvas>
-        <div class="graph-overlay-hint">
-          <span>💡 Click any node to inspect telemetry, attack path, or trigger quarantine</span>
+      <!-- Clean 2D Device Grid -->
+      <div class="device-topology-grid">
+        
+        <!-- Gateway -->
+        <div class="device-card normal" id="node-gateway" data-ip="192.168.1.1">
+          <div class="device-header">
+            <span class="device-icon">🌐</span>
+            <span class="device-badge safe">Gateway</span>
+          </div>
+          <h3 class="device-name">GATEWAY-01</h3>
+          <span class="device-ip">192.168.1.1</span>
+          <div class="device-meta">
+            <span>Ports: 80, 443, 53</span>
+            <span class="device-status-text safe">Online</span>
+          </div>
         </div>
+
+        <!-- PC-01 (Victim/Target of compromise) -->
+        <div class="device-card normal" id="node-pc01" data-ip="192.168.1.10">
+          <div class="device-header">
+            <span class="device-icon" id="pc01-icon">💻</span>
+            <span class="device-badge normal" id="pc01-badge">Workstation</span>
+          </div>
+          <h3 class="device-name">PC-01 (Marketing)</h3>
+          <span class="device-ip">192.168.1.10</span>
+          <div class="device-meta">
+            <span id="pc01-ports">Ports: Normal</span>
+            <span class="device-status-text safe" id="pc01-status">Clean</span>
+          </div>
+          <div class="quarantine-stamp hidden" id="pc01-stamp">QUARANTINED</div>
+        </div>
+
+        <!-- PC-02 -->
+        <div class="device-card normal" id="node-pc02" data-ip="192.168.1.15">
+          <div class="device-header">
+            <span class="device-icon">💻</span>
+            <span class="device-badge safe">Workstation</span>
+          </div>
+          <h3 class="device-name">PC-02 (Accounting)</h3>
+          <span class="device-ip">192.168.1.15</span>
+          <div class="device-meta">
+            <span>Ports: None</span>
+            <span class="device-status-text safe">Clean</span>
+          </div>
+        </div>
+
+        <!-- Application Server -->
+        <div class="device-card normal" id="node-appsrv" data-ip="192.168.1.50">
+          <div class="device-header">
+            <span class="device-icon">🖥️</span>
+            <span class="device-badge normal" id="appsrv-badge">App Server</span>
+          </div>
+          <h3 class="device-name">APP-SRV-01</h3>
+          <span class="device-ip">192.168.1.50</span>
+          <div class="device-meta">
+            <span>Ports: 80, 445 (SMB)</span>
+            <span class="device-status-text safe" id="appsrv-status">Clean</span>
+          </div>
+        </div>
+
+        <!-- Crown Jewel Database -->
+        <div class="device-card crown-jewel" id="node-db" data-ip="192.168.1.100">
+          <div class="device-header">
+            <span class="device-icon">🗄️</span>
+            <span class="device-badge crown">Crown Jewel</span>
+          </div>
+          <h3 class="device-name">DB-FINANCIAL</h3>
+          <span class="device-ip">192.168.1.100</span>
+          <div class="device-meta">
+            <span>Port: 5432 (SQL)</span>
+            <span class="device-status-text safe" id="db-status">Protected</span>
+          </div>
+        </div>
+
       </div>
 
-      <div class="node-inspector" id="node-inspector-card">
-        <div class="inspector-header">
-          <h3 id="inspect-node-title">Selected Node: PC-01 (192.168.1.10)</h3>
-          <span class="badge badge-danger" id="inspect-node-badge">Compromised</span>
-        </div>
-        <div class="inspector-grid">
-          <div class="inspect-item">
-            <span class="inspect-label">Role</span>
-            <span class="inspect-val" id="inspect-role">Workstation (Marketing)</span>
-          </div>
-          <div class="inspect-item">
-            <span class="inspect-label">Hardware MAC</span>
-            <span class="inspect-val mono" id="inspect-mac">F0:18:98:23:44:11</span>
-          </div>
-          <div class="inspect-item">
-            <span class="inspect-label">Open Ports</span>
-            <span class="inspect-val mono" id="inspect-ports">445 (SMB), 3389 (RDP)</span>
-          </div>
-          <div class="inspect-item">
-            <span class="inspect-label">Blast Radius</span>
-            <span class="inspect-val danger-text" id="inspect-blast">3 Critical Targets Reachable</span>
-          </div>
+      <!-- Visual Attack Path Indicator (Revealed during attack) -->
+      <div class="attack-path-tracker hidden" id="attack-path-tracker">
+        <span class="tracker-label">🚨 DETECTED ATTACK TRAVERSAL:</span>
+        <div class="tracker-steps">
+          <span class="t-node red">PC-01 (192.168.1.10)</span>
+          <span class="t-arrow">➔ [SMB Port 445 Pivot] ➔</span>
+          <span class="t-node amber">APP-SRV-01 (192.168.1.50)</span>
+          <span class="t-arrow">➔ [Reachable SQL Target] ➔</span>
+          <span class="t-node purple">DB-FINANCIAL (192.168.1.100)</span>
         </div>
       </div>
     </section>
 
-    <!-- Right Panel: Threat Engine, Attack Path Analysis & Containment -->
-    <aside class="panel analytics-panel" id="panel-analytics">
-      <!-- Attack Path Visualizer -->
-      <div class="card attack-path-card" id="card-attack-path">
-        <div class="card-header">
-          <div class="panel-title-group">
-            <span class="panel-icon">🎯</span>
-            <h3>Lateral Attack-Path Traversal</h3>
+    <!-- Simple, Clear 3-Card Summary Grid -->
+    <section class="summary-cards-grid">
+      
+      <!-- Card 1: Plain-English Live Defense Feed -->
+      <div class="clean-card">
+        <div class="clean-card-header">
+          <div class="c-title-wrap">
+            <span class="c-icon">📋</span>
+            <h3>Live Defense Activity Log</h3>
           </div>
-          <span class="pulse-tag active">ACTIVE HOP</span>
+          <span class="live-pulse-badge">● LIVE</span>
         </div>
-
-        <div class="path-visual-chain" id="path-visual-chain">
-          <div class="chain-step step-compromised">
-            <div class="step-circle">01</div>
-            <div class="step-info">
-              <span class="step-name">PC-01</span>
-              <span class="step-desc">Initial Compromise</span>
-            </div>
+        <div class="log-entries" id="defense-log">
+          <div class="log-item">
+            <span class="log-time">22:00:01</span>
+            <span class="log-badge safe">BASELINE</span>
+            <span class="log-text">Network baseline initialized. All 5 devices communicating normally.</span>
           </div>
-          <div class="chain-arrow">➔</div>
-          <div class="chain-step step-pivot">
-            <div class="step-circle">02</div>
-            <div class="step-info">
-              <span class="step-name">APP-SRV-01</span>
-              <span class="step-desc">SMB Pivot (Port 445)</span>
-            </div>
-          </div>
-          <div class="chain-arrow">➔</div>
-          <div class="chain-step step-target">
-            <div class="step-circle">03</div>
-            <div class="step-info">
-              <span class="step-name">DB-FINANCIAL</span>
-              <span class="step-desc">Crown Jewel Database</span>
-            </div>
-          </div>
-        </div>
-        <p class="attack-summary-text" id="attack-narrative">
-          ⚠️ <strong>Lateral Movement Alert:</strong> Workstation <code>192.168.1.10</code> established unauthorized SMB connection to <code>192.168.1.50</code>, followed by database query attempt on <code>192.168.1.100:5432</code>.
-        </p>
-      </div>
-
-      <!-- Risk Factors & Composite Scoring -->
-      <div class="card risk-scoring-card" id="card-risk-scoring">
-        <div class="card-header">
-          <div class="panel-title-group">
-            <span class="panel-icon">📊</span>
-            <h3>Multi-Factor Risk Engine</h3>
-          </div>
-          <span class="risk-number-badge" id="risk-score-display">91/100</span>
-        </div>
-
-        <div class="risk-factors-list">
-          <div class="factor-row">
-            <div class="factor-meta">
-              <span>Rapid Vertical Port Reconnaissance</span>
-              <span class="factor-points">+35 pts</span>
-            </div>
-            <div class="progress-track"><div class="progress-fill fill-amber" style="width: 70%;"></div></div>
-          </div>
-
-          <div class="factor-row">
-            <div class="factor-meta">
-              <span>Peer-to-Peer SMB/RDP Administrative Pivot</span>
-              <span class="factor-points">+45 pts</span>
-            </div>
-            <div class="progress-track"><div class="progress-fill fill-danger" style="width: 90%;"></div></div>
-          </div>
-
-          <div class="factor-row">
-            <div class="factor-meta">
-              <span>High-Value Financial DB Proximity</span>
-              <span class="factor-points">+25 pts</span>
-            </div>
-            <div class="progress-track"><div class="progress-fill fill-danger" style="width: 80%;"></div></div>
+          <div class="log-item">
+            <span class="log-time">22:00:03</span>
+            <span class="log-badge safe">MONITOR</span>
+            <span class="log-text">L2-L7 packet capture engine active. Flow tracker recording 0 anomalies.</span>
           </div>
         </div>
       </div>
 
-      <!-- Automated Containment Action Card -->
-      <div class="card containment-card" id="card-containment">
-        <div class="card-header">
-          <div class="panel-title-group">
-            <span class="panel-icon">⚡</span>
-            <h3>Adaptive Automated Containment</h3>
+      <!-- Card 2: Risk Engine & Breakdown -->
+      <div class="clean-card">
+        <div class="clean-card-header">
+          <div class="c-title-wrap">
+            <span class="c-icon">📊</span>
+            <h3>Risk Engine Analysis</h3>
           </div>
-          <span class="status-badge-live" id="containment-badge">ARMED</span>
+          <span class="risk-pill safe" id="risk-pill">5 / 100</span>
         </div>
-
-        <div class="containment-action-box" id="containment-box">
-          <div class="containment-meta">
-            <span class="containment-label">TARGET FOR ISOLATION</span>
-            <span class="target-ip-badge" id="quarantine-target-ip">192.168.1.10 (PC-01)</span>
+        <div class="risk-breakdown-list">
+          <div class="risk-item">
+            <div class="r-meta">
+              <span>Port Reconnaissance</span>
+              <span class="r-pts" id="pts-scan">0 pts</span>
+            </div>
+            <div class="r-bar"><div class="r-fill" id="bar-scan" style="width: 0%;"></div></div>
           </div>
-          <p class="containment-explanation" id="quarantine-explanation">
-            Host has exceeded critical risk threshold (91 > 85). Containment driver will generate native host firewall rules and sever active connection sockets.
-          </p>
-
-          <div class="containment-buttons">
-            <button class="btn btn-danger btn-block" id="btn-trigger-quarantine">
-              🚨 EXECUTE HOST QUARANTINE
-            </button>
-            <button class="btn btn-secondary btn-block hidden" id="btn-release-quarantine">
-              ✅ RELEASE QUARANTINE
-            </button>
+          <div class="risk-item">
+            <div class="r-meta">
+              <span>Internal SMB/RDP Lateral Hop</span>
+              <span class="r-pts" id="pts-lateral">0 pts</span>
+            </div>
+            <div class="r-bar"><div class="r-fill" id="bar-lateral" style="width: 0%;"></div></div>
           </div>
+          <div class="risk-item">
+            <div class="r-meta">
+              <span>Crown Jewel DB Blast Proximity</span>
+              <span class="r-pts" id="pts-db">0 pts</span>
+            </div>
+            <div class="r-bar"><div class="r-fill" id="bar-db" style="width: 0%;"></div></div>
+          </div>
+        </div>
+        <div class="risk-verdict" id="risk-verdict">
+          <strong>Status:</strong> Normal network operations. No containment action needed.
         </div>
       </div>
-    </aside>
+
+      <!-- Card 3: Automated Containment Status -->
+      <div class="clean-card">
+        <div class="clean-card-header">
+          <div class="c-title-wrap">
+            <span class="c-icon">⚡</span>
+            <h3>Automated Containment</h3>
+          </div>
+          <span class="containment-status-pill armed" id="containment-status-pill">ARMED</span>
+        </div>
+        <div class="containment-details">
+          <div class="c-row">
+            <span class="c-label">Isolation Target:</span>
+            <span class="c-value" id="containment-target">None (All Hosts Clean)</span>
+          </div>
+          <div class="c-row">
+            <span class="c-label">Firewall Rule:</span>
+            <span class="c-code" id="containment-rule">Waiting for threat trigger</span>
+          </div>
+          <div class="c-row">
+            <span class="c-label">Reaction Latency:</span>
+            <span class="c-value highlight">0.4 milliseconds</span>
+          </div>
+        </div>
+        <div class="containment-footer-btn">
+          <button class="btn btn-outline btn-block" id="btn-toggle-quarantine" disabled>
+            Release Quarantine
+          </button>
+        </div>
+      </div>
+
+    </section>
   </main>
 
-  <!-- Bottom Telemetry Feeds -->
-  <section class="telemetry-bottom-section">
-    <!-- Live Flow & Packet Stream -->
-    <div class="panel packet-stream-panel" id="panel-packet-stream">
-      <div class="panel-header">
-        <div class="panel-title-group">
-          <span class="panel-icon">📡</span>
-          <h3>Live Network Packet & Flow Stream</h3>
+  <!-- Slide-Out "How It Works" Drawer -->
+  <div class="drawer-overlay" id="drawer-overlay">
+    <div class="drawer-panel">
+      <div class="drawer-header">
+        <div class="drawer-brand">
+          <span class="d-shield">🛡️</span>
+          <div>
+            <h3>How NEXUS-SHIELD Works</h3>
+            <span>Designed & Developed by Amarthaluri Srinivasu</span>
+          </div>
         </div>
-        <div class="stream-stats">
-          <span class="stat-pill"><span class="dot-live"></span> 14,280 pkts/s</span>
-          <span class="stat-pill">Zero Packet Drops</span>
-        </div>
+        <button class="drawer-close" id="btn-close-drawer">✕</button>
       </div>
 
-      <div class="packet-terminal" id="packet-log-terminal">
-        <!-- Dynamically injected real-time packet logs -->
+      <div class="drawer-content">
+        <!-- 3 Simple Pillars -->
+        <div class="pillar-box">
+          <div class="pillar-num">1</div>
+          <div class="pillar-info">
+            <h4>Listens in Real-Time</h4>
+            <p>Monitors network packets continuously (L2 through L7) and keeps track of who is talking to whom in an in-memory graph $G = (V, E)$.</p>
+          </div>
+        </div>
+
+        <div class="pillar-box">
+          <div class="pillar-num">2</div>
+          <div class="pillar-info">
+            <h4>Spots Hidden Lateral Movement</h4>
+            <p>Traditional firewalls watch the outside internet. NEXUS-SHIELD watches the inside. If a marketing workstation suddenly scans internal servers or talks to another PC over SMB (Port 445), it catches it immediately.</p>
+          </div>
+        </div>
+
+        <div class="pillar-box">
+          <div class="pillar-num">3</div>
+          <div class="pillar-info">
+            <h4>Blocks Instantly via Firewall</h4>
+            <p>When threat risk exceeds 85/100, it doesn't just send an email—it instantly issues a native Windows Firewall rule to isolate the infected machine in 0.4 milliseconds.</p>
+          </div>
+        </div>
+
+        <!-- Developer Bio & Tech Stack -->
+        <div class="drawer-dev-card">
+          <div class="dev-card-top">
+            <div class="avatar-sm">AS</div>
+            <div>
+              <strong>Amarthaluri Srinivasu</strong>
+              <div class="dev-role-sub">Cybersecurity Architect & Lead Developer</div>
+            </div>
+          </div>
+          <p class="dev-quote">
+            "Built to solve the #1 gap in modern corporate defense: stealthy lateral movement between internal machines after an initial breach."
+          </p>
+          <div class="drawer-tech-tags">
+            <span>Python 3.12</span>
+            <span>Scapy Sniffer</span>
+            <span>NetworkX Graph</span>
+            <span>Windows Firewall API</span>
+            <span>FastAPI</span>
+          </div>
+        </div>
+
+        <button class="btn btn-primary btn-block" id="btn-drawer-sim">
+          ⚡ Run Attack & Defense Demo Now
+        </button>
       </div>
     </div>
+  </div>
 
-    <!-- Asset Inventory Table -->
-    <div class="panel asset-inventory-panel" id="panel-asset-inventory">
-      <div class="panel-header">
-        <div class="panel-title-group">
-          <span class="panel-icon">💻</span>
-          <h3>Discovered Network Assets</h3>
-        </div>
-      </div>
-
-      <div class="table-container">
-        <table class="asset-table" id="asset-table">
-          <thead>
-            <tr>
-              <th>IP Address</th>
-              <th>Hostname</th>
-              <th>Role</th>
-              <th>Criticality</th>
-              <th>Risk Score</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody id="asset-table-body">
-            <!-- Dynamically populated rows -->
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </section>
-
-  <!-- Toast Notification System -->
   <div class="toast-container" id="toast-container"></div>
 
   <script src="app.js"></script>

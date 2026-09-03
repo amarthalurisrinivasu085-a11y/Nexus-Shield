@@ -1,640 +1,298 @@
 /**
- * NEXUS-SHIELD: Dynamic Frontend Defense Operations Center
- * Controls Canvas Network Security Graph, Live Packet Feeds,
- * Attack Chain Simulator, Risk Scoring, and Automated Containment.
+ * NEXUS-SHIELD: Clean Modern SOC Controller
+ * Designed for intuitive clarity, zero complexity, and real-time responsiveness.
+ * Developed by Amarthaluri Srinivasu
  */
 
-// Initial Network State
-const NETWORK_NODES = [
-  {
-    id: "192.168.1.1",
-    label: "GATEWAY-01",
-    role: "Perimeter Router",
-    criticality: "Critical",
-    mac: "00:50:56:01:00:01",
-    openPorts: [80, 443, 53],
-    status: "NORMAL",
-    riskScore: 5,
-    x: 450,
-    y: 70,
-    color: "#06B6D4",
-    icon: "🌐",
-    blastCount: 0
-  },
-  {
-    id: "192.168.1.10",
-    label: "PC-01",
-    role: "Workstation (Marketing)",
-    criticality: "Medium",
-    mac: "F0:18:98:23:44:11",
-    openPorts: [445, 3389],
-    status: "COMPROMISED",
-    riskScore: 91,
-    x: 200,
-    y: 220,
-    color: "#EF4444",
-    icon: "💻",
-    blastCount: 3
-  },
-  {
-    id: "192.168.1.15",
-    label: "PC-02",
-    role: "Workstation (Accounting)",
-    criticality: "Medium",
-    mac: "3C:22:FB:99:88:77",
-    openPorts: [],
-    status: "NORMAL",
-    riskScore: 12,
-    x: 700,
-    y: 220,
-    color: "#06B6D4",
-    icon: "💻",
-    blastCount: 0
-  },
-  {
-    id: "192.168.1.50",
-    label: "APP-SRV-01",
-    role: "Internal Application Server",
-    criticality: "High",
-    mac: "00:0C:29:AA:BB:CC",
-    openPorts: [80, 445, 8080],
-    status: "SUSPICIOUS",
-    riskScore: 68,
-    x: 350,
-    y: 380,
-    color: "#F59E0B",
-    icon: "🖥️",
-    blastCount: 2
-  },
-  {
-    id: "192.168.1.100",
-    label: "DB-FINANCIAL",
-    role: "Production Database",
-    criticality: "Critical",
-    mac: "00:50:56:DE:AD:BE",
-    openPorts: [5432],
-    status: "TARGETED",
-    riskScore: 85,
-    x: 550,
-    y: 440,
-    color: "#8B5CF6",
-    icon: "🗄️",
-    blastCount: 1
-  }
-];
-
-// Graph Edges (Traffic Flows)
-let NETWORK_EDGES = [
-  { source: "192.168.1.10", target: "192.168.1.1", protocol: "HTTPS", port: 443, type: "normal" },
-  { source: "192.168.1.15", target: "192.168.1.1", protocol: "DNS", port: 53, type: "normal" },
-  { source: "192.168.1.50", target: "192.168.1.100", protocol: "PGSQL", port: 5432, type: "normal" },
-  { source: "192.168.1.10", target: "192.168.1.50", protocol: "SMB", port: 445, type: "attack" },
-  { source: "192.168.1.50", target: "192.168.1.100", protocol: "SQL-QUERY", port: 5432, type: "attack" }
-];
-
-// Active Particles for Edge Animation
-let particles = [];
-
 // DOM Elements
-const canvas = document.getElementById("networkGraphCanvas");
-const ctx = canvas.getContext("2d");
-const packetLogTerminal = document.getElementById("packet-log-terminal");
-const assetTableBody = document.getElementById("asset-table-body");
-const btnSimulate = document.getElementById("btn-simulate-attack");
-const btnReset = document.getElementById("btn-reset-baseline");
-const btnExport = document.getElementById("btn-export-report");
-const btnTriggerQuarantine = document.getElementById("btn-trigger-quarantine");
-const btnReleaseQuarantine = document.getElementById("btn-release-quarantine");
+const heroBanner = document.getElementById("hero-banner");
+const bannerTitle = document.getElementById("banner-title");
+const bannerDesc = document.getElementById("banner-desc");
+const bannerTag = document.getElementById("banner-tag");
+const bannerScore = document.getElementById("banner-score");
+const bannerIcon = document.getElementById("banner-icon");
+
+const globalStatusPill = document.getElementById("global-status-pill");
+const statusDot = document.getElementById("status-dot");
+const statusText = document.getElementById("status-text");
+
+const btnSimAttack = document.getElementById("btn-sim-attack");
+const btnReset = document.getElementById("btn-reset");
+const btnOpenDrawer = document.getElementById("btn-open-drawer");
+const btnCloseDrawer = document.getElementById("btn-close-drawer");
+const btnDevInfo = document.getElementById("btn-dev-info");
+const btnDrawerSim = document.getElementById("btn-drawer-sim");
+const drawerOverlay = document.getElementById("drawer-overlay");
+
+const nodePC01 = document.getElementById("node-pc01");
+const pc01Badge = document.getElementById("pc01-badge");
+const pc01Status = document.getElementById("pc01-status");
+const pc01Stamp = document.getElementById("pc01-stamp");
+
+const nodeAppSrv = document.getElementById("node-appsrv");
+const appsrvBadge = document.getElementById("appsrv-badge");
+const appsrvStatus = document.getElementById("appsrv-status");
+
+const attackPathTracker = document.getElementById("attack-path-tracker");
+const defenseLog = document.getElementById("defense-log");
+
+const riskPill = document.getElementById("risk-pill");
+const ptsScan = document.getElementById("pts-scan");
+const ptsLateral = document.getElementById("pts-lateral");
+const ptsDB = document.getElementById("pts-db");
+const barScan = document.getElementById("bar-scan");
+const barLateral = document.getElementById("bar-lateral");
+const barDB = document.getElementById("bar-db");
+const riskVerdict = document.getElementById("risk-verdict");
+
+const containmentStatusPill = document.getElementById("containment-status-pill");
+const containmentTarget = document.getElementById("containment-target");
+const containmentRule = document.getElementById("containment-rule");
+const btnToggleQuarantine = document.getElementById("btn-toggle-quarantine");
 const toastContainer = document.getElementById("toast-container");
 
-let selectedNode = NETWORK_NODES[1]; // PC-01 default
+let isUnderAttack = false;
 let isQuarantined = false;
 
-// ============================================================================
-// Canvas Graph Rendering Engine
-// ============================================================================
+// Device Information Database for Clean Click Inspector
+const DEVICE_INFO = {
+  "192.168.1.1": { name: "GATEWAY-01", role: "Perimeter Router", mac: "00:50:56:01:00:01", ports: "80, 443, 53" },
+  "192.168.1.10": { name: "PC-01 (Marketing)", role: "Workstation", mac: "F0:18:98:23:44:11", ports: "445 (SMB), 3389 (RDP)" },
+  "192.168.1.15": { name: "PC-02 (Accounting)", role: "Workstation", mac: "3C:22:FB:99:88:77", ports: "Standard HTTP/S" },
+  "192.168.1.50": { name: "APP-SRV-01", role: "Application Server", mac: "00:0C:29:AA:BB:CC", ports: "80, 445 (SMB), 8080" },
+  "192.168.1.100": { name: "DB-FINANCIAL", role: "Crown Jewel Production DB", mac: "00:50:56:DE:AD:BE", ports: "5432 (PostgreSQL)" }
+};
 
-function initCanvas() {
-  function resize() {
-    const rect = canvas.getBoundingClientRect();
-    canvas.width = rect.width * window.devicePixelRatio;
-    canvas.height = rect.height * window.devicePixelRatio;
-    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-  }
-  resize();
-  window.addEventListener("resize", resize);
-
-  // Spawn flowing particles
-  for (let i = 0; i < 20; i++) {
-    particles.push({
-      edgeIndex: Math.floor(Math.random() * NETWORK_EDGES.length),
-      progress: Math.random(),
-      speed: 0.004 + Math.random() * 0.005
-    });
-  }
-
-  // Handle click on canvas
-  canvas.addEventListener("click", (e) => {
-    const rect = canvas.getBoundingClientRect();
-    const clickX = e.clientX - rect.left;
-    const clickY = e.clientY - rect.top;
-
-    for (let node of NETWORK_NODES) {
-      const dist = Math.hypot(clickX - node.x, clickY - node.y);
-      if (dist < 28) {
-        selectNode(node);
-        break;
-      }
-    }
-  });
-
-  requestAnimationFrame(renderGraph);
+// Add entry to Live Defense Activity Log
+function addLogEntry(type, badgeClass, message) {
+  const now = new Date();
+  const timeStr = now.toTimeString().split(" ")[0];
+  const item = document.createElement("div");
+  item.className = "log-item";
+  item.innerHTML = `
+    <span class="log-time">${timeStr}</span>
+    <span class="log-badge ${badgeClass}">${type}</span>
+    <span class="log-text">${message}</span>
+  `;
+  defenseLog.insertBefore(item, defenseLog.firstChild);
 }
 
-function renderGraph() {
-  const rect = canvas.getBoundingClientRect();
-  ctx.clearRect(0, 0, rect.width, rect.height);
-
-  // 1. Draw Edges
-  NETWORK_EDGES.forEach((edge, idx) => {
-    const src = NETWORK_NODES.find(n => n.id === edge.source);
-    const dst = NETWORK_NODES.find(n => n.id === edge.target);
-    if (!src || !dst) return;
-
-    ctx.save();
-    ctx.beginPath();
-    ctx.moveTo(src.x, src.y);
-    ctx.lineTo(dst.x, dst.y);
-
-    if (edge.type === "attack") {
-      if (isQuarantined && (edge.source === "192.168.1.10" || edge.target === "192.168.1.10")) {
-        // Severed link
-        ctx.strokeStyle = "rgba(100, 116, 139, 0.4)";
-        ctx.lineWidth = 2;
-        ctx.setLineDash([4, 6]);
-      } else {
-        // Active Attack Edge
-        ctx.strokeStyle = "rgba(239, 68, 68, 0.85)";
-        ctx.lineWidth = 3;
-        ctx.setLineDash([6, 6]);
-        ctx.shadowColor = "#EF4444";
-        ctx.shadowBlur = 12;
-      }
-    } else {
-      ctx.strokeStyle = "rgba(6, 182, 212, 0.25)";
-      ctx.lineWidth = 1.5;
-    }
-    ctx.stroke();
-    ctx.restore();
-
-    // Draw protocol pill on edge
-    const midX = (src.x + dst.x) / 2;
-    const midY = (src.y + dst.y) / 2;
-    ctx.fillStyle = edge.type === "attack" ? "rgba(239, 68, 68, 0.9)" : "rgba(14, 21, 38, 0.85)";
-    ctx.fillRect(midX - 22, midY - 9, 44, 18);
-    ctx.strokeStyle = edge.type === "attack" ? "#EF4444" : "rgba(6, 182, 212, 0.4)";
-    ctx.strokeRect(midX - 22, midY - 9, 44, 18);
-    ctx.fillStyle = "#FFFFFF";
-    ctx.font = "9px 'JetBrains Mono'";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText(`${edge.protocol}`, midX, midY);
-  });
-
-  // 2. Animate Traffic Particles
-  if (!isQuarantined) {
-    particles.forEach(p => {
-      const edge = NETWORK_EDGES[p.edgeIndex];
-      if (!edge) return;
-      const src = NETWORK_NODES.find(n => n.id === edge.source);
-      const dst = NETWORK_NODES.find(n => n.id === edge.target);
-      if (!src || !dst) return;
-
-      p.progress += p.speed;
-      if (p.progress > 1) p.progress = 0;
-
-      const px = src.x + (dst.x - src.x) * p.progress;
-      const py = src.y + (dst.y - src.y) * p.progress;
-
-      ctx.save();
-      ctx.beginPath();
-      ctx.arc(px, py, edge.type === "attack" ? 4 : 3, 0, Math.PI * 2);
-      ctx.fillStyle = edge.type === "attack" ? "#F87171" : "#38BDF8";
-      ctx.shadowColor = edge.type === "attack" ? "#EF4444" : "#06B6D4";
-      ctx.shadowBlur = 8;
-      ctx.fill();
-      ctx.restore();
-    });
-  }
-
-  // 3. Draw Nodes
-  NETWORK_NODES.forEach(node => {
-    ctx.save();
-
-    // Pulse ring for compromised or high risk
-    if (node.status === "COMPROMISED" && !isQuarantined) {
-      const time = Date.now() * 0.003;
-      const pulseSize = 26 + Math.sin(time) * 6;
-      ctx.beginPath();
-      ctx.arc(node.x, node.y, pulseSize, 0, Math.PI * 2);
-      ctx.strokeStyle = "rgba(239, 68, 68, 0.5)";
-      ctx.lineWidth = 2;
-      ctx.stroke();
-    }
-
-    // Node outer circle
-    ctx.beginPath();
-    ctx.arc(node.x, node.y, 22, 0, Math.PI * 2);
-
-    if (node.status === "QUARANTINED") {
-      ctx.fillStyle = "#1E293B";
-      ctx.strokeStyle = "#64748B";
-    } else if (node.status === "COMPROMISED") {
-      ctx.fillStyle = "rgba(239, 68, 68, 0.25)";
-      ctx.strokeStyle = "#EF4444";
-      ctx.shadowColor = "#EF4444";
-      ctx.shadowBlur = 15;
-    } else if (node.status === "TARGETED") {
-      ctx.fillStyle = "rgba(139, 92, 246, 0.25)";
-      ctx.strokeStyle = "#8B5CF6";
-      ctx.shadowColor = "#8B5CF6";
-      ctx.shadowBlur = 12;
-    } else {
-      ctx.fillStyle = "rgba(6, 182, 212, 0.15)";
-      ctx.strokeStyle = "#06B6D4";
-    }
-
-    ctx.lineWidth = selectedNode.id === node.id ? 3.5 : 2;
-    ctx.fill();
-    ctx.stroke();
-
-    // Draw Icon
-    ctx.font = "16px sans-serif";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText(node.icon, node.x, node.y);
-
-    // Draw Label & IP below
-    ctx.fillStyle = "#F8FAFC";
-    ctx.font = "bold 11px 'Inter'";
-    ctx.fillText(node.label, node.x, node.y + 36);
-
-    ctx.fillStyle = node.status === "COMPROMISED" ? "#F87171" : "#94A3B8";
-    ctx.font = "10px 'JetBrains Mono'";
-    ctx.fillText(node.id, node.x, node.y + 49);
-
-    ctx.restore();
-  });
-
-  requestAnimationFrame(renderGraph);
-}
-
-// ============================================================================
-// Node Inspection & UI Updates
-// ============================================================================
-
-function selectNode(node) {
-  selectedNode = node;
-  document.getElementById("inspect-node-title").textContent = `Selected Node: ${node.label} (${node.id})`;
-  const badge = document.getElementById("inspect-node-badge");
-  badge.textContent = node.status;
-  badge.className = `badge ${node.status === 'COMPROMISED' ? 'badge-danger' : 'badge-outline'}`;
-
-  document.getElementById("inspect-role").textContent = node.role;
-  document.getElementById("inspect-mac").textContent = node.mac;
-  document.getElementById("inspect-ports").textContent = node.openPorts.length > 0 ? node.openPorts.join(", ") : "None Detected";
-  document.getElementById("inspect-blast").textContent = `${node.blastCount} Critical Assets in Blast Radius`;
-}
-
-// ============================================================================
-// Live Packet Streaming Log Generator
-// ============================================================================
-
-const SAMPLE_LOGS = [
-  { proto: "TCP", src: "192.168.1.10", dst: "192.168.1.50:445", text: "[SYN_SENT] Anomalous SMB session probe", cls: "proto-smb", alert: true },
-  { proto: "DNS", src: "192.168.1.15", dst: "192.168.1.1:53", text: "QUERY A cdn.microsoft.com [Normal]", cls: "proto-dns", alert: false },
-  { proto: "TCP", src: "192.168.1.10", dst: "192.168.1.50:3389", text: "[SYN] RDP port sweep attempt", cls: "proto-smb", alert: true },
-  { proto: "ARP", src: "00:50:56:01:00:01", dst: "FF:FF:FF:FF:FF:FF", text: "Who has 192.168.1.100? Tell 192.168.1.1", cls: "proto-arp", alert: false },
-  { proto: "TCP", src: "192.168.1.50", dst: "192.168.1.100:5432", text: "PostgreSQL Handshake Seq=1023", cls: "proto-tcp", alert: false },
-  { proto: "SMB", src: "192.168.1.10", dst: "192.168.1.50", text: "Tree Connect: IPC$ - Admin Token Asserted", cls: "proto-smb", alert: true }
-];
-
-let logCounter = 0;
-
-function streamPackets() {
-  setInterval(() => {
-    const item = SAMPLE_LOGS[logCounter % SAMPLE_LOGS.length];
-    logCounter++;
-
-    const now = new Date();
-    const timeStr = now.toTimeString().split(' ')[0] + '.' + String(now.getMilliseconds()).padStart(3, '0');
-
-    const logDiv = document.createElement("div");
-    logDiv.className = "log-line";
-    logDiv.innerHTML = `
-      <span class="log-time">[${timeStr}]</span>
-      <span class="log-proto ${item.cls}">${item.proto}</span>
-      <span class="log-src">${item.src}</span>
-      <span class="log-arrow">➔</span>
-      <span class="log-dst">${item.dst}</span>
-      <span class="${item.alert ? 'log-alert' : 'log-text'}">${item.text}</span>
-    `;
-
-    packetLogTerminal.appendChild(logDiv);
-    if (packetLogTerminal.children.length > 50) {
-      packetLogTerminal.removeChild(packetLogTerminal.firstChild);
-    }
-    packetLogTerminal.scrollTop = packetLogTerminal.scrollHeight;
-  }, 1200);
-}
-
-// ============================================================================
-// Asset Table Rendering
-// ============================================================================
-
-function renderAssetTable() {
-  assetTableBody.innerHTML = "";
-  NETWORK_NODES.forEach(node => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td class="mono"><strong>${node.id}</strong></td>
-      <td>${node.label}</td>
-      <td>${node.role}</td>
-      <td><span class="badge ${node.criticality === 'Critical' ? 'badge-danger' : 'badge-outline'}">${node.criticality}</span></td>
-      <td class="mono ${node.riskScore > 75 ? 'danger-text' : ''}"><strong>${node.riskScore}/100</strong></td>
-      <td><span class="status-tag ${node.status.toLowerCase()}">${node.status}</span></td>
-      <td>
-        ${node.status === 'COMPROMISED' ? 
-          `<button class="btn btn-danger btn-sm" onclick="triggerQuarantine('${node.id}')">Quarantine</button>` : 
-          node.status === 'QUARANTINED' ? 
-          `<button class="btn btn-outline btn-sm" onclick="releaseQuarantine('${node.id}')">Restore</button>` : 
-          `<span style="color:var(--text-muted)">Protected</span>`
-        }
-      </td>
-    `;
-    assetTableBody.appendChild(tr);
-  });
-}
-
-// ============================================================================
-// Automated Containment Handlers
-// ============================================================================
-
-function triggerQuarantine(ip = "192.168.1.10") {
-  isQuarantined = true;
-  const node = NETWORK_NODES.find(n => n.id === ip);
-  if (node) {
-    node.status = "QUARANTINED";
-    node.riskScore = 0;
-  }
-
-  document.getElementById("containment-engine-status").textContent = "QUARANTINE EXECUTED";
-  document.getElementById("containment-engine-status").className = "metric-value danger-text";
-  document.getElementById("containment-badge").textContent = "ISOLATED";
-  document.getElementById("containment-badge").style.background = "rgba(239, 68, 68, 0.25)";
-  document.getElementById("btn-trigger-quarantine").classList.add("hidden");
-  document.getElementById("btn-release-quarantine").classList.remove("hidden");
-  document.getElementById("global-risk-value").textContent = "18 / 100";
-  document.getElementById("global-risk-badge").textContent = "CONTAINED";
-  document.getElementById("global-risk-badge").className = "severity-pill";
-  document.getElementById("defcon-value").textContent = "LEVEL 5 (NORMAL)";
-  document.getElementById("defcon-value").className = "metric-value active-green";
-
-  showToast(`🛡️ Host ${ip} successfully isolated via dynamic firewall rule: NEXUS_ISOLATE_${ip.replace(/\./g, '_')}`);
-  renderAssetTable();
-  selectNode(node);
-}
-
-function releaseQuarantine(ip = "192.168.1.10") {
-  isQuarantined = false;
-  const node = NETWORK_NODES.find(n => n.id === ip);
-  if (node) {
-    node.status = "COMPROMISED";
-    node.riskScore = 91;
-  }
-
-  document.getElementById("containment-engine-status").textContent = "ARMED & ACTIVE";
-  document.getElementById("containment-engine-status").className = "metric-value active-green";
-  document.getElementById("containment-badge").textContent = "ARMED";
-  document.getElementById("containment-badge").style.background = "rgba(16, 185, 129, 0.2)";
-  document.getElementById("btn-trigger-quarantine").classList.remove("hidden");
-  document.getElementById("btn-release-quarantine").classList.add("hidden");
-  document.getElementById("global-risk-value").textContent = "91 / 100";
-  document.getElementById("global-risk-badge").textContent = "CRITICAL";
-  document.getElementById("global-risk-badge").className = "severity-pill critical";
-  document.getElementById("defcon-value").textContent = "LEVEL 2 (ELEVATED)";
-  document.getElementById("defcon-value").className = "metric-value danger-text";
-
-  showToast(`✅ Quarantine removed for ${ip}. Restored network routing.`);
-  renderAssetTable();
-  selectNode(node);
-}
-
-window.triggerQuarantine = triggerQuarantine;
-window.releaseQuarantine = releaseQuarantine;
-
-btnTriggerQuarantine.addEventListener("click", () => triggerQuarantine("192.168.1.10"));
-btnReleaseQuarantine.addEventListener("click", () => releaseQuarantine("192.168.1.10"));
-
-// Simulate Attack Chain
-btnSimulate.addEventListener("click", () => {
-  showToast("⚡ Initiating Automated Multi-Stage Attack Simulation...");
-  setTimeout(() => {
-    showToast("🚨 STAGE 1: Vertical Port Reconnaissance detected from 192.168.1.10 hitting ports 21, 22, 80, 445, 3389!");
-  }, 1000);
-  setTimeout(() => {
-    showToast("🚨 STAGE 2: Lateral Movement pivot over SMB (Port 445) targeting APP-SRV-01 (192.168.1.50)!");
-  }, 2500);
-  setTimeout(() => {
-    showToast("🚨 STAGE 3: Crown Jewel Exposure! Blast radius reaching DB-FINANCIAL (192.168.1.100)!");
-    if (!isQuarantined) {
-      triggerQuarantine("192.168.1.10");
-    }
-  }, 4200);
-});
-
-// Reset Baseline
-btnReset.addEventListener("click", () => {
-  releaseQuarantine("192.168.1.10");
-  showToast("🔄 Behavioral baseline and rolling traffic counters recalibrated.");
-});
-
-// Export Incident Log
-btnExport.addEventListener("click", () => {
-  const incidentData = {
-    platform: "NEXUS-SHIELD",
-    version: "2.6.4",
-    exportTime: new Date().toISOString(),
-    globalRiskIndex: 91,
-    severity: "CRITICAL",
-    compromisedHost: "192.168.1.10",
-    attackChain: ["192.168.1.10", "192.168.1.50", "192.168.1.100"],
-    blastRadius: {
-      criticalAssetsReachable: ["192.168.1.100 (DB-FINANCIAL)", "192.168.1.50 (APP-SRV-01)"],
-      score: 85
-    },
-    containmentStatus: isQuarantined ? "ISOLATED" : "PENDING_ACTION",
-    networkNodes: NETWORK_NODES,
-    activeEdges: NETWORK_EDGES
-  };
-
-  const blob = new Blob([JSON.stringify(incidentData, null, 2)], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `NEXUS-SHIELD-INCIDENT-${Date.now()}.json`;
-  a.click();
-  URL.revokeObjectURL(url);
-  showToast("📥 Incident report exported successfully as JSON.");
-});
-
-function showToast(message) {
+// Show Toast
+function showToast(msg) {
   const toast = document.createElement("div");
   toast.className = "toast";
-  toast.innerHTML = `<span>${message}</span>`;
+  toast.innerText = msg;
   toastContainer.appendChild(toast);
   setTimeout(() => {
     toast.style.opacity = "0";
-    setTimeout(() => toast.remove(), 300);
+    setTimeout(() => toast.remove(), 250);
   }, 3500);
 }
 
-// Initial Setup
-initCanvas();
-streamPackets();
-renderAssetTable();
-selectNode(selectedNode);
+// 1. Attack & Defense Simulation Trigger
+function runAttackSimulation() {
+  if (isUnderAttack) return;
+  isUnderAttack = true;
 
-// ==========================================================================
-// 2D Walkthrough Slider & Smooth Dashboard Transition
-// ==========================================================================
-const sliderModal = document.getElementById("slider-modal");
-const slidesTrack = document.getElementById("slides-track");
-const btnPrevSlide = document.getElementById("btn-prev-slide");
-const btnNextSlide = document.getElementById("btn-next-slide");
-const btnSkipToDashboard = document.getElementById("btn-skip-to-dashboard");
-const btnEnterOriginalSoc = document.getElementById("btn-enter-original-soc");
-const btnSlideAndSimulate = document.getElementById("btn-slide-and-simulate");
-const btnOpenSlides = document.getElementById("btn-open-slides");
-const headerDevCredit = document.getElementById("header-dev-credit");
-const slideIndicatorTabs = document.querySelectorAll(".slide-indicator-tab");
-const slideDots = document.querySelectorAll(".slide-dots .dot");
+  btnSimAttack.disabled = true;
+  btnSimAttack.innerHTML = `<span>⏳ Simulating...</span>`;
 
-let currentSlideIndex = 0;
-const totalSlides = 4;
+  // Step 1: Reconnaissance (Port Sweep)
+  addLogEntry("RECON", "danger", "PC-01 (192.168.1.10) initiated rapid 10-port scan toward App Server.");
+  nodePC01.classList.add("compromised");
+  pc01Badge.className = "device-badge danger";
+  pc01Badge.innerText = "Recon Active";
+  pc01Status.className = "device-status-text danger";
+  pc01Status.innerText = "Scanning Subnet";
 
-function goToSlide(index) {
-  if (index < 0 || index >= totalSlides) return;
-  currentSlideIndex = index;
+  ptsScan.innerText = "+35 pts";
+  barScan.style.width = "70%";
+  barScan.className = "r-fill danger";
 
-  // Move slide track
-  if (slidesTrack) {
-    slidesTrack.style.transform = `translateX(-${currentSlideIndex * 25}%)`;
+  bannerScore.innerText = "40";
+  bannerScore.className = "metric-big danger";
+  riskPill.innerText = "40 / 100";
+  riskPill.className = "risk-pill danger";
+
+  // Step 2: Lateral Movement Hop (at 750ms)
+  setTimeout(() => {
+    addLogEntry("LATERAL", "danger", "PC-01 pivoted to APP-SRV-01 over SMB Port 445 using cached credentials.");
+    nodeAppSrv.classList.add("pivot-target");
+    appsrvBadge.className = "device-badge danger";
+    appsrvBadge.innerText = "SMB Pivot Target";
+    appsrvStatus.className = "device-status-text danger";
+    appsrvStatus.innerText = "Unauthorized Hop";
+
+    ptsLateral.innerText = "+45 pts";
+    barLateral.style.width = "90%";
+    barLateral.className = "r-fill danger";
+
+    attackPathTracker.classList.remove("hidden");
+    bannerScore.innerText = "85";
+    riskPill.innerText = "85 / 100";
+  }, 750);
+
+  // Step 3: Attack Path Threatens Database (at 1500ms)
+  setTimeout(() => {
+    addLogEntry("BLAST RISK", "danger", "Attack path reaches Crown Jewel DB-FINANCIAL (192.168.1.100). Composite risk: 91/100 [CRITICAL].");
+    ptsDB.innerText = "+25 pts";
+    barDB.style.width = "85%";
+    barDB.className = "r-fill danger";
+
+    bannerScore.innerText = "91";
+    riskPill.innerText = "91 / 100";
+    riskVerdict.innerHTML = `<strong style="color: #F87171;">Critical Alert:</strong> Multi-hop lateral movement detected. Automated containment threshold exceeded.`;
+
+    heroBanner.className = "hero-status-banner compromised";
+    bannerIcon.innerHTML = `<span class="banner-icon">🚨</span>`;
+    bannerTitle.innerText = "🚨 Threat Detected: PC-01 Isolated";
+    bannerDesc.innerText = "PC-01 attempted unauthorized SMB lateral pivot toward Financial Database. Threat score: 91/100. Host contained in 0.4ms.";
+    bannerTag.className = "threat-level-tag danger";
+    bannerTag.innerText = "THREAT LEVEL: CRITICAL";
+
+    globalStatusPill.className = "system-status-pill danger";
+    statusDot.className = "status-dot red";
+    statusText.innerText = "THREAT ISOLATED";
+  }, 1500);
+
+  // Step 4: Automated Windows Firewall Containment (at 2100ms)
+  setTimeout(() => {
+    isQuarantined = true;
+    pc01Stamp.classList.remove("hidden");
+    pc01Badge.innerText = "ISOLATED";
+    pc01Status.innerText = "Blocked";
+
+    containmentStatusPill.className = "containment-status-pill isolated";
+    containmentStatusPill.innerText = "HOST QUARANTINED";
+    containmentTarget.innerHTML = `<strong style="color: #F87171;">192.168.1.10 (PC-01)</strong>`;
+    containmentRule.innerText = `netsh advfirewall firewall add rule name="NEXUS-ISOLATE-192.168.1.10" dir=out action=block`;
+    btnToggleQuarantine.disabled = false;
+    btnToggleQuarantine.innerText = "Release Quarantine";
+
+    addLogEntry("CONTAINMENT", "contain", "NEXUS-SHIELD generated native Windows Firewall isolation rule. Malicious outbound sockets severed.");
+    showToast("🚨 Host 192.168.1.10 isolated via native Windows Firewall rule.");
+
+    btnSimAttack.disabled = false;
+    btnSimAttack.innerHTML = `<span>⚡ Run Simulation Again</span>`;
+  }, 2100);
+}
+
+// 2. Reset Network Function
+function resetNetwork() {
+  isUnderAttack = false;
+  isQuarantined = false;
+
+  // Reset Banner
+  heroBanner.className = "hero-status-banner secure";
+  bannerIcon.innerHTML = `<span class="banner-icon">🛡️</span>`;
+  bannerTitle.innerText = "Network Protected: All 5 Devices Safe";
+  bannerDesc.innerText = "Continuous in-memory monitoring is active. Lateral movement detectors and zero-trust Windows Firewall containment are armed.";
+  bannerTag.className = "threat-level-tag safe";
+  bannerTag.innerText = "THREAT LEVEL: LOW";
+  bannerScore.innerText = "5";
+  bannerScore.className = "metric-big";
+
+  // Reset Global Pill
+  globalStatusPill.className = "system-status-pill";
+  statusDot.className = "status-dot green";
+  statusText.innerText = "NETWORK SECURE";
+
+  // Reset Devices
+  nodePC01.className = "device-card normal";
+  pc01Badge.className = "device-badge normal";
+  pc01Badge.innerText = "Workstation";
+  pc01Status.className = "device-status-text safe";
+  pc01Status.innerText = "Clean";
+  pc01Stamp.classList.add("hidden");
+
+  nodeAppSrv.className = "device-card normal";
+  appsrvBadge.className = "device-badge normal";
+  appsrvBadge.innerText = "App Server";
+  appsrvStatus.className = "device-status-text safe";
+  appsrvStatus.innerText = "Clean";
+
+  attackPathTracker.classList.add("hidden");
+
+  // Reset Risk
+  riskPill.innerText = "5 / 100";
+  riskPill.className = "risk-pill safe";
+  ptsScan.innerText = "0 pts";
+  ptsLateral.innerText = "0 pts";
+  ptsDB.innerText = "0 pts";
+  barScan.style.width = "0%";
+  barScan.className = "r-fill";
+  barLateral.style.width = "0%";
+  barLateral.className = "r-fill";
+  barDB.style.width = "0%";
+  barDB.className = "r-fill";
+  riskVerdict.innerHTML = `<strong>Status:</strong> Normal network operations. No containment action needed.`;
+
+  // Reset Containment
+  containmentStatusPill.className = "containment-status-pill armed";
+  containmentStatusPill.innerText = "ARMED";
+  containmentTarget.innerText = "None (All Hosts Clean)";
+  containmentRule.innerText = "Waiting for threat trigger";
+  btnToggleQuarantine.disabled = true;
+  btnToggleQuarantine.innerText = "Release Quarantine";
+
+  btnSimAttack.disabled = false;
+  btnSimAttack.innerHTML = `<span>⚡ Simulate Threat & Defend</span>`;
+
+  addLogEntry("RESET", "safe", "Baseline recalibrated. Host quarantine released and firewall rules purged.");
+  showToast("🔄 Network reset. All devices returned to safe baseline.");
+}
+
+// 3. Toggle Quarantine Manually
+btnToggleQuarantine.addEventListener("click", () => {
+  if (isQuarantined) {
+    // Release
+    isQuarantined = false;
+    pc01Stamp.classList.add("hidden");
+    pc01Badge.innerText = "Workstation";
+    pc01Status.innerText = "Monitoring";
+    nodePC01.classList.remove("compromised");
+    containmentStatusPill.className = "containment-status-pill armed";
+    containmentStatusPill.innerText = "ARMED";
+    containmentTarget.innerText = "None (Quarantine Released)";
+    btnToggleQuarantine.innerText = "Host Unblocked";
+    btnToggleQuarantine.disabled = true;
+    addLogEntry("RELEASE", "safe", "Administrator released quarantine rule for 192.168.1.10.");
+    showToast("✅ Quarantine released. Network traffic resumed.");
   }
+});
 
-  // Update indicator tabs
-  slideIndicatorTabs.forEach((tab, i) => {
-    tab.classList.toggle("active", i === currentSlideIndex);
-  });
-
-  // Update dots
-  slideDots.forEach((dot, i) => {
-    dot.classList.toggle("active", i === currentSlideIndex);
-  });
-
-  // Update navigation buttons
-  if (btnPrevSlide) {
-    btnPrevSlide.disabled = currentSlideIndex === 0;
-  }
-  if (btnNextSlide) {
-    if (currentSlideIndex === totalSlides - 1) {
-      btnNextSlide.innerHTML = "Finish & Enter SOC ➔";
-    } else {
-      btnNextSlide.innerHTML = "Next Slide →";
+// Device Click Inspector
+document.querySelectorAll(".device-card").forEach(card => {
+  card.addEventListener("click", () => {
+    const ip = card.getAttribute("data-ip");
+    const dev = DEVICE_INFO[ip];
+    if (dev) {
+      showToast(`💻 ${dev.name} [${ip}] | Role: ${dev.role} | Ports: ${dev.ports}`);
     }
-  }
-}
-
-function slideToDashboard(andSimulate = false) {
-  if (sliderModal) {
-    sliderModal.classList.add("slide-out");
-  }
-  if (andSimulate) {
-    setTimeout(() => {
-      btnSimulate.click();
-      showToast("⚡ Launching live multi-stage attack simulation demonstration...");
-    }, 400);
-  } else {
-    showToast("🛡️ Welcome to NEXUS-SHIELD Live Defense Operations Center.");
-  }
-}
-
-function openSliderModal() {
-  if (sliderModal) {
-    sliderModal.classList.remove("slide-out");
-  }
-}
-
-if (btnPrevSlide) {
-  btnPrevSlide.addEventListener("click", () => {
-    goToSlide(currentSlideIndex - 1);
-  });
-}
-
-if (btnNextSlide) {
-  btnNextSlide.addEventListener("click", () => {
-    if (currentSlideIndex < totalSlides - 1) {
-      goToSlide(currentSlideIndex + 1);
-    } else {
-      slideToDashboard(false);
-    }
-  });
-}
-
-slideIndicatorTabs.forEach((tab) => {
-  tab.addEventListener("click", () => {
-    const slideIdx = parseInt(tab.dataset.slide, 10);
-    goToSlide(slideIdx);
   });
 });
 
-slideDots.forEach((dot) => {
-  dot.addEventListener("click", () => {
-    const slideIdx = parseInt(dot.dataset.slide, 10);
-    goToSlide(slideIdx);
-  });
+// Drawer Open / Close
+function openDrawer() { drawerOverlay.classList.add("open"); }
+function closeDrawer() { drawerOverlay.classList.remove("open"); }
+
+btnOpenDrawer.addEventListener("click", openDrawer);
+btnDevInfo.addEventListener("click", openDrawer);
+btnCloseDrawer.addEventListener("click", closeDrawer);
+drawerOverlay.addEventListener("click", (e) => {
+  if (e.target === drawerOverlay) closeDrawer();
 });
 
-if (btnSkipToDashboard) {
-  btnSkipToDashboard.addEventListener("click", () => slideToDashboard(false));
-}
-
-if (btnEnterOriginalSoc) {
-  btnEnterOriginalSoc.addEventListener("click", () => slideToDashboard(false));
-}
-
-if (btnSlideAndSimulate) {
-  btnSlideAndSimulate.addEventListener("click", () => slideToDashboard(true));
-}
-
-if (btnOpenSlides) {
-  btnOpenSlides.addEventListener("click", openSliderModal);
-}
-
-if (headerDevCredit) {
-  headerDevCredit.addEventListener("click", openSliderModal);
-}
-
-// Keyboard shortcuts for slider navigation
-document.addEventListener("keydown", (e) => {
-  if (sliderModal && !sliderModal.classList.contains("slide-out")) {
-    if (e.key === "ArrowRight") {
-      if (currentSlideIndex < totalSlides - 1) goToSlide(currentSlideIndex + 1);
-    } else if (e.key === "ArrowLeft") {
-      if (currentSlideIndex > 0) goToSlide(currentSlideIndex - 1);
-    } else if (e.key === "Escape") {
-      slideToDashboard(false);
-    }
-  }
+btnDrawerSim.addEventListener("click", () => {
+  closeDrawer();
+  setTimeout(() => runAttackSimulation(), 300);
 });
 
+// Buttons
+btnSimAttack.addEventListener("click", runAttackSimulation);
+btnReset.addEventListener("click", resetNetwork);
+
+// Welcome toast
+setTimeout(() => {
+  showToast("🛡️ NEXUS-SHIELD Active • Developed by Amarthaluri Srinivasu");
+}, 400);
