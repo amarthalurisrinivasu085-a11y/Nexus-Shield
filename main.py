@@ -22,6 +22,22 @@ from graph.network_graph import NetworkSecurityGraph
 from engine.risk_scorer import RiskScorer
 from containment.quarantine import QuarantineController
 
+# Top-level FastAPI instance for Vercel / serverless deployments
+try:
+    from fastapi import FastAPI
+    app = FastAPI(title="NEXUS-SHIELD", version="2.6.4")
+
+    @app.get("/api/health")
+    def health():
+        return {
+            "status": "online",
+            "platform": "NEXUS-SHIELD",
+            "developer": "Amarthaluri Srinivasu",
+            "version": "2.6.4"
+        }
+except Exception:
+    app = None
+
 
 def run_demonstration():
     print("=" * 80)

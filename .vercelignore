@@ -1,11 +1,3 @@
-# Exclude local backend Python files from Vercel static build
-main.py
-requirements.txt
-core/
-discovery/
-detector/
-graph/
-engine/
-containment/
+# Ignore local utility scripts
 push.bat
 push_debug.txt
